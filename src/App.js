@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import Login from './modules/Account/Login';
 import Overview from './modules/Overview';
+import Layout from './layouts/BasicLayout';
 
 
 class App extends Component {
@@ -15,6 +16,7 @@ class App extends Component {
       <Router>
         <Switch>
           <Route exact path="/" component={Overview} />
+          <Route path="/layout" component={Layout} />
           <Route path="/login" component={Login} />
         </Switch>
       </Router>
