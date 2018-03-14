@@ -3,21 +3,25 @@ import 'antd/dist/antd.css';
 import {
   BrowserRouter as Router,
   Route,
-  Switch
+  Switch,
+  Redirect
 } from 'react-router-dom';
+import ProtectedRoute from './modules/Common/ProtectedRoute'
 import Login from './modules/Account/Login';
-import Overview from './modules/Overview';
-import Layout from './layouts/BasicLayout';
-
+import Project from './modules/Project';
+import Conversation from './modules/Conversation';
 
 class App extends Component {
   render() {
     return (
       <Router>
         <Switch>
-          <Route exact path="/" component={Overview} />
-          <Route path="/layout" component={Layout} />
+          <Route exact path="/">
+            <Redirect to="/projects" />
+          </Route>
           <Route path="/login" component={Login} />
+          <ProtectedRoute path="/projects" component={Project} />
+          <ProtectedRoute path="/conversations" component={Conversation} />
         </Switch>
       </Router>
     );
