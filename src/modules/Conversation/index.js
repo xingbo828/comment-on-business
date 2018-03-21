@@ -1,8 +1,9 @@
 import React from 'react';
-import withDashboardLayout from '../Common/withDashboardLayout';
+import withLayout from '../Common/withLayout';
 import { Route, Switch } from 'react-router-dom';
 import ConversationOverview from './Overview';
 import ConversationDetail from './Detail';
+import DashboardLayout from '../Common/Layout/DashboardLayout';
 
 const Conversation = () => {
   return (
@@ -13,4 +14,4 @@ const Conversation = () => {
   );
 };
 
-export default withDashboardLayout(Conversation);
+export default withLayout(DashboardLayout)(Conversation);

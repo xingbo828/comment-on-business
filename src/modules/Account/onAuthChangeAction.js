@@ -11,7 +11,15 @@ export const onAuthChange = () => dispatch => {
       const userDocRef = userCollectionRef.doc(user.uid);
       const userDoc = await userDocRef.get();
       if(userDoc.exists){
-        const additionalUserData = await userDoc.data();
+        let additionalUserData = await userDoc.data();
+        if(additionalUserData.providers && Object.keys(additionalUserData.providers).length > 0) {
+          const providersPromises = Object.keys(additionalUserData.providers).map(async key => {
+            const a = await additionalUserData.providers[key].get()
+            return { ...a.data(), id: key };
+          })
+          const providers = await Promise.all(providersPromises);
+          additionalUserData.providers = providers;
+        }
         dispatch({
           type: USER_LOGIN,
           data: {...user.toJSON(), ...additionalUserData}
