@@ -8,7 +8,7 @@ const createProjectHttpClient = async (providerId) => {
   projectHttpClient.defaults.headers.common[
     'Authorization'
   ] = `Bearer ${myToken}`;
-  
+
   projectHttpClient.defaults.headers.common[
     'Provider'
   ] = providerId;
