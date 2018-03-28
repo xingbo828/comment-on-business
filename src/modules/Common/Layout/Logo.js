@@ -11,7 +11,7 @@ import {
 import mapImmutablePropsToPlainProps from '../../Common/mapImmutablePropsToPlainProps';
 
 const LogoContainer = styled.div`
-  ${'' /* height: 60px; */} color: white;
+  color: white;
   font-size: 1.1rem;
   line-height: 60px;
   text-align: center;
@@ -32,17 +32,19 @@ const Logo = ({ selectedProviderProfile, availableProviderProfiles, setDefaultPr
     </Menu>
   );
 
+
+
   return (
     <LogoContainer>
-      <div>
+      <Dropdown overlay={menu} placement="bottomLeft" disabled={availableProviderProfiles.length <= 1}>
+        <div>
         {selectedProviderProfile.logo && (
-          <Avatar src={selectedProviderProfile.logo} size="large" />
-        )}{' '}
+          <Avatar src={selectedProviderProfile.logo} size="large" style={{marginRight: 10}} />
+        )}
         {selectedProviderProfile.name}
-        {availableProviderProfiles.length > 1 && <Dropdown overlay={menu}>
-          <span style={{fontSize: '.9rem'}}> <Icon type="down" /></span>
-        </Dropdown>}
-      </div>
+        {availableProviderProfiles.length > 1 && <Icon type="down" style={{marginLeft: 5, fontSize: '.9rem'}} />}
+        </div>
+        </Dropdown>
     </LogoContainer>
   );
 };

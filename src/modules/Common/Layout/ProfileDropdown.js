@@ -1,10 +1,11 @@
 import React from 'react';
 import { compose, withProps } from 'recompose';
 import { Menu, Dropdown, Avatar, Icon } from 'antd';
-
+import { Link } from 'react-router-dom';
 import { auth } from '../../../firebaseClient';
+import isLoggedin from '../isLoggedIn';
 
-const ProfileDropdown = ({ logout }) => {
+const ProfileDropdown = ({ user, logout }) => {
   const clickHandler = (e) => {
     if(e.key === 'logout') {
       logout();
@@ -12,7 +13,10 @@ const ProfileDropdown = ({ logout }) => {
   };
 
   const profileDropDown = (
-    <Menu style={{ width: '160px' }} onClick={clickHandler}>
+    <Menu  onClick={clickHandler}>
+      <Menu.Item key="register">
+          <Link to="/register" style={{display: 'block'}}><Icon type="shop" /> Register new company</Link>
+      </Menu.Item>
       <Menu.Item key="logout">
         <Icon type="logout" /> Logout
       </Menu.Item>
@@ -25,7 +29,7 @@ const ProfileDropdown = ({ logout }) => {
       trigger={['click']}
     >
       <a style={{display: 'block'}} className="ant-dropdown-link" href="">
-        <Avatar size="large" icon="user" />
+        <Avatar size="large" src={user.photoURL} />
       </a>
     </Dropdown>
   );
@@ -36,6 +40,7 @@ const logout = () => {
 };
 
 const enhance = compose(
+  isLoggedin,
   withProps(props => ({
   logout
 })))

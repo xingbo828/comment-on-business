@@ -7,15 +7,16 @@ import {
   Icon,
   Spin
 } from 'antd';
+import isString from 'lodash/isString';
+import isArray from 'lodash/isArray';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
 
-class Register extends Component {
+class CompanyProfile extends Component {
   state = {
-    logoSelected: false,
-    isSubmitting: false
+    logoSelected: false
   }
 
   normFile = (e) => {
@@ -33,25 +34,25 @@ class Register extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll(async (err, values) => {
+    this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        const logo = (values.logo && values.logo.length > 0) ? values.logo[0].originFileObj : undefined;
-        this.setState({
-          isSubmitting: true
-        })
-        await this.props.createProvider(Object.assign({}, values, { logo }));
-        this.props.history.push({
-          pathname: '/'
-        })
-
+        let logo;
+        if(values.logo) {
+          if (isString(values.logo)) {
+            logo = values.logo;
+          } else if(isArray(values.logo) && values.logo.length > 0) {
+            logo = values.logo[0].originFileObj;
+          }
+        }
+        this.props.submitForm(Object.assign({}, values, { logo }));
       }
     });
   };
 
 
   render() {
-    const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator, getFieldProps } = this.props.form;
     const { logoSelected } = this.state;
 
     const formItemLayout = {
@@ -85,8 +86,27 @@ class Register extends Component {
       </div>
     );
 
+    const renderUpload = () => {
+      if(getFieldProps('logo').value && !logoSelected) {
+        return (
+        <Upload name="logo"  className="avatar-uploader" listType="picture-card" onChange={this.handleChange}>
+          <img width="100" src={getFieldProps('logo').value} alt="Logo" />
+        </Upload>
+        )
+      }
+      return (
+        getFieldDecorator('logo', {
+          getValueFromEvent: this.normFile,
+        })(
+          <Upload name="logo"  className="avatar-uploader" listType="picture-card" onChange={this.handleChange}>
+             {!logoSelected && uploadButton}
+          </Upload>
+        )
+      )
+    }
+
     return (
-      <Spin spinning={this.state.isSubmitting}>
+      <Spin spinning={this.props.isSubmitting}>
       <Form onSubmit={this.handleSubmit}>
         <FormItem {...formItemLayout} label="Business Name" hasFeedback>
           {getFieldDecorator('name', {
@@ -103,14 +123,7 @@ class Register extends Component {
           {...formItemLayout}
           label="Upload"
         >
-          {getFieldDecorator('logo', {
-            valuePropName: 'fileList',
-            getValueFromEvent: this.normFile,
-          })(
-            <Upload name="logo"  className="avatar-uploader" listType="picture-card" onChange={this.handleChange}>
-               {!logoSelected && uploadButton}
-            </Upload>
-          )}
+          {renderUpload()}
         </FormItem>
 
 
@@ -166,4 +179,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default CompanyProfile;

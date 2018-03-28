@@ -40,14 +40,13 @@ const _updateUserProviders = async providerRef => {
   return providers;
 };
 
-export const UPDATE_PROFILE = 'UPDATE_PROFILE';
-export const createProvider = providerInfo => async dispatch => {
-  const providerDocRef = await providerCollectionRef.add({});
-  const providerId = providerDocRef.id;
-  const logo = await _uploadLogo(providerInfo.logo, providerId);
+
+const _updateProviderProfile = async (providerId, providerInfo, dispatch) => {
+  const logo = await _uploadLogo(providerInfo.logo, providerId); 
   const updatedProviderInfo = isUndefined(logo) ? omit(providerInfo, ['logo']) : Object.assign(providerInfo, {
     logo
   });
+  const providerDocRef = providerCollectionRef.doc(providerId);
   providerDocRef.update(updatedProviderInfo);
   await _updateUserProviders(providerDocRef);
   const providerDataPromise = await providerDocRef.get();
@@ -57,7 +56,19 @@ export const createProvider = providerInfo => async dispatch => {
     field: 'providers',
     data: {providers: [{ ...providerData, id: providerId }]}
   })
+}
+
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+export const createProvider = providerInfo => async dispatch => {
+  const providerDocRef = await providerCollectionRef.add({});
+  const providerId = providerDocRef.id;
+  return await _updateProviderProfile(providerId, providerInfo, dispatch);
 };
+
+export const editProvider = (providerId, providerInfo) => async dispatch => {
+  return await _updateProviderProfile(providerId, providerInfo, dispatch);
+}
+
 
 export const DEFAULT_PROVIDER_CHANGE = 'DEFAULT_PROVIDER_CHANGE';
 export const setDefaultProvider = providerId => async dispatch => {
