@@ -8,7 +8,7 @@ import DashboardLayout from '../Common/Layout/DashboardLayout';
 const Project = () => {
   return (
     <Switch>
-      <Route path="/projects" component={ProjectOverview} />
+      <Route exact path="/projects" component={ProjectOverview} />
       <Route path="/projects/:projectId" component={ProjectDetail} />
     </Switch>
   );
