@@ -13,7 +13,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getProjects: (providerId) => dispatch(getProjects(providerId))
+  getProjects: () => dispatch(getProjects())
 });
 
 const enhance = compose(
@@ -22,9 +22,7 @@ const enhance = compose(
   mapImmutablePropsToPlainProps,
   lifecycle({
     componentDidMount() {
-      const providerId = this.props.selectedProviderProfile.id;
-      console.log(providerId)
-      this.props.getProjects(providerId);
+      this.props.getProjects();
     }
   }),
 );

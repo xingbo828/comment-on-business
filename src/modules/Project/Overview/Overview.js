@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom'
 
 import { H1 } from '../../Common/Components/Heading';
 
-const ProjectOverview = ({projects, getProjects}) => {
-  console.log(projects);
+const ProjectOverview = ({projects}) => {
   const columns = [{
     title: 'Name',
     dataIndex: 'name',

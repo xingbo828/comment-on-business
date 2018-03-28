@@ -2,13 +2,14 @@ import { connect } from 'react-redux';
 import Detail from './Detail';
 import { withRouter } from 'react-router-dom';
 import { compose, lifecycle } from 'recompose';
-import { getProjects as getProjectsSelector } from '../projectReducer';
-import { getProjects } from '../projectAction';
+import { getProject as getProjectSelector } from '../projectReducer';
+import { getProject } from '../projectAction';
+import { Card, Steps, Form, Input } from 'antd';
 
-const mapStateToProps = state => getProjectsSelector(state);
+const mapStateToProps = state => getProjectSelector(state);
 
 const mapDispatchToProps = dispatch => ({
-  getProjects: () => dispatch(getProjects())
+  getProject: (projectId) => dispatch(getProject(projectId))
 });
 
 const enhance = compose(
@@ -16,9 +17,14 @@ const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
   lifecycle({
     componentDidMount() {
-      this.props.getProjects();
+      this.props.getProject(this.props.match.params.projectId);
     }
   }),
+  Form.create({
+    mapPropsToFields({ project }) {
+      return;
+    }
+  })
 );
 export default enhance(Detail);
 
