@@ -25,7 +25,7 @@ class App extends Component {
           <ProtectedRoute path="/register" component={RegisterCompany} />
           <ProtectedRoute path="/projects" component={Project} />
           <ProtectedRoute path="/conversations" component={Conversation} />
-          <ProtectedRoute path="/company-profile/edit" component={EditCompanyProfile} />
+          <ProtectedRoute exact path="/company-profile/edit" component={EditCompanyProfile} />
         </Switch>
       </Router>
     );

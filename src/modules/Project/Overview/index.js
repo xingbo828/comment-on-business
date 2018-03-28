@@ -1,23 +1,30 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import Overview from './Overview';
-import { withRouter , Redirect } from 'react-router-dom';
-import { compose, withProps, branch, renderNothing, renderComponent, lifecycle } from 'recompose';
+import { withRouter } from 'react-router-dom';
+import { compose, lifecycle } from 'recompose';
 import { getProjects as getProjectsSelector } from '../projectReducer';
 import { getProjects } from '../projectAction';
+import { getSelectedProviderProfile } from '../../Account/accountReducer';
+import mapImmutablePropsToPlainProps from '../../Common/mapImmutablePropsToPlainProps';
 
-const mapStateToProps = state => getProjectsSelector(state);
+const mapStateToProps = state => ({
+  ...getSelectedProviderProfile(state),
+  ...getProjectsSelector(state)
+});
 
 const mapDispatchToProps = dispatch => ({
-  getProjects: () => dispatch(getProjects())
+  getProjects: (providerId) => dispatch(getProjects(providerId))
 });
 
 const enhance = compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps),
+  mapImmutablePropsToPlainProps,
   lifecycle({
     componentDidMount() {
-      this.props.getProjects();
+      const providerId = this.props.selectedProviderProfile.id;
+      console.log(providerId)
+      this.props.getProjects(providerId);
     }
   }),
 );

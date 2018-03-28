@@ -1,6 +1,9 @@
 import React from 'react';
 import { Table } from 'antd';
 import { Link } from 'react-router-dom'
+
+import { H1 } from '../../Common/Components/Heading';
+
 const ProjectOverview = ({projects, getProjects}) => {
   console.log(projects);
   const columns = [{
@@ -27,10 +30,10 @@ const ProjectOverview = ({projects, getProjects}) => {
   }];
   return (
     <div>
-      Project Overview
+      <H1>Project Overview</H1>
       <Table dataSource={projects} columns={columns} />
     </div>
-  );;
+  );
 };
 
 export default ProjectOverview;

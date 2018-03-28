@@ -1,8 +1,7 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import Detail from './Detail';
-import { withRouter , Redirect } from 'react-router-dom';
-import { compose, withProps, branch, renderNothing, renderComponent, lifecycle } from 'recompose';
+import { withRouter } from 'react-router-dom';
+import { compose, lifecycle } from 'recompose';
 import { getProjects as getProjectsSelector } from '../projectReducer';
 import { getProjects } from '../projectAction';
 

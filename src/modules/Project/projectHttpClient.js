@@ -2,12 +2,16 @@ import createHttpClient from '../../HttpClient';
 import { auth } from '../../firebaseClient';
 import memoize from "lodash/memoize";
 
-const createProjectHttpClient = async () => {
+const createProjectHttpClient = async (providerId) => {
   const myToken = await auth.currentUser.getIdToken(true);
   const projectHttpClient = createHttpClient();
   projectHttpClient.defaults.headers.common[
     'Authorization'
   ] = `Bearer ${myToken}`;
+  
+  projectHttpClient.defaults.headers.common[
+    'Provider'
+  ] = providerId;
 
   const getProject = (projectId) => projectHttpClient.get(`/projects/${projectId}`);
   const getProjects = () => projectHttpClient.get('/projects/');

@@ -16,7 +16,7 @@ const Sidebar = ({ history, location }) => {
     icon: 'message',
     text: 'Conversations'
   },{
-    key: '/company-profile',
+    key: '/company-profile/edit',
     icon: 'profile',
     text: 'Company Profile'
   }];

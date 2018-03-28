@@ -1,7 +1,5 @@
-import { auth, firestore, firebaseInstance } from '../../firebaseClient';
 import createProjectHttpClient from './projectHttpClient';
 
-const projectCollectionRef = firestore.collection('projects');
 
 export const PROJECT_CREATED = 'PROJECT_CREATED';
 
@@ -10,11 +8,11 @@ export const GET_MY_PROJECTS_PENDING = 'GET_MY_PROJECT_PENDING';
 export const GET_MY_PROJECTS_SUCCESS = 'GET_MY_PROJECT_SUCCESS';
 export const GET_MY_PROJECTS_FAIL = 'GET_MY_PROJECT_FAIL';
 
-export const getProjects = (projectRefs) => async dispatch => {
+export const getProjects = (providerId) => async dispatch => {
   dispatch({
     type: GET_MY_PROJECTS_PENDING
   });
-  const projectHttpClient = await createProjectHttpClient();
+  const projectHttpClient = await createProjectHttpClient(providerId);
   const projects =  await projectHttpClient.getProjects();
 
   console.log(projects);
