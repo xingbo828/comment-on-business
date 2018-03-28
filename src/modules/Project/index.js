@@ -7,7 +7,7 @@ import ProjectDetail from './Detail';
 const Project = () => {
   return (
     <Switch>
-      <Route path="/projects" component={ProjectOverview} />
+      <Route exact path="/projects" component={ProjectOverview} />
       <Route path="/projects/:projectId" component={ProjectDetail} />
     </Switch>
   );
