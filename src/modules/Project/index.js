@@ -1,8 +1,9 @@
 import React from 'react';
-import withDashboardLayout from '../Common/withDashboardLayout';
+import withLayout from '../Common/withLayout';
 import { Route, Switch } from 'react-router-dom';
 import ProjectOverview from './Overview';
 import ProjectDetail from './Detail';
+import DashboardLayout from '../Common/Layout/DashboardLayout';
 
 const Project = () => {
   return (
@@ -13,4 +14,4 @@ const Project = () => {
   );
 };
 
-export default withDashboardLayout(Project);
+export default withLayout(DashboardLayout)(Project);

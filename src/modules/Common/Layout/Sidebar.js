@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import includes from 'lodash/includes';
 import { Layout, Menu, Icon } from 'antd';
+import Logo from './Logo';
 
 const { Sider } = Layout;
 
@@ -37,18 +38,7 @@ const Sidebar = ({ history, location }) => {
         console.log(collapsed, type);
       }}
     >
-      <div
-        className="logo"
-        style={{
-          height: 60,
-          color: 'white',
-          fontSize: '1.1rem',
-          lineHeight: '60px',
-          textAlign: 'center'
-        }}
-      >
-        LOGO
-      </div>
+      <Logo />
       <Menu
         theme="dark"
         mode="inline"

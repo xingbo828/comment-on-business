@@ -2,7 +2,9 @@ import React from 'react';
 import { Route, withRouter, Redirect } from 'react-router-dom';
 import { compose, branch, renderNothing } from 'recompose';
 import isLoggedIn from './isLoggedIn';
-
+import {
+  message
+} from 'antd';
 const ProtectedRoute = ({
   component: Component,
   isLoggedIn,
@@ -13,7 +15,7 @@ const ProtectedRoute = ({
     {...rest}
     render={props =>
       isLoggedIn ? 
-        <Component {...props} /> : (
+        renderLoggedInView(props, rest)(Component) : (
         <Redirect
           to={{
             pathname: '/login',
@@ -23,6 +25,18 @@ const ProtectedRoute = ({
       )}
   />
 );
+
+const renderLoggedInView = (props, { user, history }) => (Component) => {
+  if (history.location.pathname !== '/register' && (!user.providers || user.providers.length === 0)) {
+    message.info('Doesn\'t seem like you have a component registered. Let\'s get started', 5);
+    return (<Redirect
+      to={{
+        pathname: '/register',
+      }}
+    />)
+  }
+  return <Component {...props} />;
+}
 
 export default compose(
   withRouter,

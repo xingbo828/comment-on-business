@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import { createSelector } from 'reselect';
 import { USER_LOGIN, USER_LOGOUT } from './onAuthChangeAction';
+import { UPDATE_PROFILE, DEFAULT_PROVIDER_CHANGE } from './accountAction';
 
 const initState = Immutable.fromJS({
   status: 'UNINIT',
@@ -19,6 +20,15 @@ export default (state = initState, action) => {
         st.set('user', Immutable.fromJS({}));
         st.set('status', 'NOT_AUTHENTICATED');
       });
+    case UPDATE_PROFILE:
+      return state.withMutations((st) => {
+        const newData = Immutable.fromJS(action.data);
+        const newProfile = st.get('user').mergeDeep(newData);
+        st.set('user', newProfile);
+      });
+    case DEFAULT_PROVIDER_CHANGE:
+      window.location.reload();
+      return state;
 
     default:
       return state;
@@ -33,5 +43,25 @@ export const getAccount = state => ({ account: state.get('account') });
 export const isLoggedin = createSelector(
   [ getAccount ], ({ account }) => ({ isLoggedIn: account.get('user').size > 0, user: account.get('user'), loginStatus: account.get('status')})
 );
+
+export const getSelectedProviderProfile = state => {
+  const user = state.getIn(['account', 'user']);
+  const defaultProviderId = user.get('defaultProvider');
+  if(defaultProviderId) {
+    const providerProfile = user.get('providers').find(p => {
+      return p.get('id') === defaultProviderId
+    });
+    if(providerProfile) {
+      return { selectedProviderProfile: providerProfile }
+    }
+  }
+  return { selectedProviderProfile: user.getIn(['providers', 0]) }
+}
+
+export const getAvailableProviderProfiles = state => {
+  return {
+    availableProviderProfiles: state.getIn(['account', 'user', 'providers'])
+  }
+}
 
 
