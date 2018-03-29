@@ -19,11 +19,14 @@ const createProjectHttpClient = async (providerId) => {
   const replyToLead = (projectId, {
     estimatedPrice,
     notes
-  }) => projectHttpClient.put(`/projects/${projectId}`, {
-    estimatedPrice,
-    notes,
-    action: 'accept'
-  });
+  }) => {
+    debugger;
+    projectHttpClient.put(`/projects/${projectId}`, {
+      estimatedPrice,
+      notes,
+      action: 'accept'
+    });
+  }
 
   const declineLead = projectId =>
     projectHttpClient.put(`/projects/${projectId}`, {

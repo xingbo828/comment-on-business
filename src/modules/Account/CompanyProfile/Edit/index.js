@@ -31,7 +31,6 @@ const enhance = compose(
   ),
   withProps(props => ({
     submitForm: async (providerInfo) => {
-      console.log(props)
       props.updateIsSubmitting(true)
       await props.editProvider(props.selectedProviderProfile.id, providerInfo);
       props.updateIsSubmitting(false)
