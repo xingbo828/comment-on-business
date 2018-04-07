@@ -20,7 +20,7 @@ const Sidebar = ({ history, location }) => {
     icon: 'profile',
     text: 'Company Profile'
   }];
-  const onSelect = e => {
+  const onClick = e => {
     history.push({ pathname: e.key });
   };
 
@@ -43,7 +43,7 @@ const Sidebar = ({ history, location }) => {
         theme="dark"
         mode="inline"
         selectedKeys={getSelectKey(navItems, location)}
-        onSelect={onSelect}
+        onClick={onClick}
       >
       {
         navItems.map(item => (

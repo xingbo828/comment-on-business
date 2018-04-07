@@ -20,7 +20,6 @@ const createProjectHttpClient = async (providerId) => {
     estimatedPrice,
     notes
   }) => {
-    debugger;
     projectHttpClient.put(`/projects/${projectId}`, {
       estimatedPrice,
       notes,

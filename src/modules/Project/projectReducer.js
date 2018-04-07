@@ -25,7 +25,7 @@ export default (state = initState, action) => {
     case GET_MY_PROJECTS_SUCCESS: {
       return state.withMutations(st => {
         st.set('status', 'LOADED');
-        st.set('projects', action.data);
+        st.set('projects', Immutable.fromJS(action.data));
       });
     }
 
@@ -45,9 +45,8 @@ export default (state = initState, action) => {
 
     case GET_MY_PROJECT_SUCCESS: {
       return state.withMutations(st => {
-        action.data.step = stepMap[action.data.receiver.status];
         st.set('status', 'LOADED');
-        st.set('project', action.data);
+        st.set('project', Immutable.fromJS(action.data));
       });
     }
 
@@ -63,3 +62,15 @@ export const getProjects = state => {
 export const getProject = state => {
   return {project: state.getIn(['project', 'project']) }
  };
+
+export const getCurrentStep = state => {
+  let currentStep = stepMap[state.getIn(['project', 'project', 'receiver', 'status'])] || 0;
+  let isRejected = false;
+
+  if (currentStep === 3) {
+    currentStep = 1;
+    isRejected = true;
+  }
+
+  return {currentStep, isRejected};
+}
