@@ -16,12 +16,12 @@ const ProjectOverview = ({projects}) => {
     key: 'contact',
   }, {
     title: 'Pick up',
-    dataIndex: 'from',
-    key: 'from',
+    dataIndex: 'pickup',
+    key: 'pickup',
   }, {
     title: 'Delivery',
-    dataIndex: 'to',
-    key: 'to',
+    dataIndex: 'delivery',
+    key: 'delivery',
   }, {
     title: 'Date',
     dataIndex: 'pickupDate',

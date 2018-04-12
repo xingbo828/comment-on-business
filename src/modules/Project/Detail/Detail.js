@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Steps, Input, Button } from 'antd';
+import { Card, Steps, Input, Button, List } from 'antd';
 import { Link } from 'react-router-dom'
 import { Route, Switch } from 'react-router-dom';
 import ReplyForm from './ReplyForm';
@@ -8,12 +8,13 @@ const Step = Steps.Step;
 
 
 
-const renderProjectDetail = (project) => {
+const renderProjectDetail = (project, isRejected, currentStep) => {
   if (!project || !project.configuration) {
     return;
   }
   return (
     <Card title="Project Details" bordered={true}>
+      {renderAcceptInfo(project, isRejected, currentStep)}
       <span>Date: {project.configuration.dateTime.pickUpDate}</span>
     </Card>
   );
@@ -39,42 +40,22 @@ const renderSteps = (currentStep, isRejected) => {
   );
 }
 
+const renderAcceptInfo = (project, isRejected, currentStep) => {
+  debugger;
+  if (!isRejected && currentStep !== 0) {
+    const data = ["Estimated Price: " + project.receiver.estimatedPrice, "Notes: " + (project.receiver.text || "")];
+    return (
+      <List
+        header={<div>My Response</div>}
+        bordered
+        dataSource={data}
+        renderItem={item => (<List.Item>{item}</List.Item>)}
+      />
+    );
+  }
+}
+
 class ProjectDetail extends Component {
-
-  // renderForm = (step) => {
-  //   const {project, form} = this.props;
-  //   return (
-  //     <Card title="" bordered={false}>
-  //       <Form onSubmit={this.handleSubmit(true)} hideRequiredMark >
-  //         <FormItem {...formItemLayout} label="Estimated Price">
-  //         {form.getFieldDecorator('estimatedPrice', {
-  //           rules: [{ required: true, message: 'Please input your price!' }],
-  //         })(
-  //           <Input placeholder="Estimated Price" />
-  //         )}
-  //       </FormItem>
-  //       <FormItem {...formItemLayout} label="Notes">
-  //         {form.getFieldDecorator('notes')(
-  //           <Input placeholder="Notes" />
-  //         )}
-  //       </FormItem>
-  //       <FormItem {...formItemLayout}>
-  //         <Button
-  //           type="primary"
-  //           htmlType="submit"
-  //         >
-  //           Accept
-  //         </Button>
-  //         <Button onClick={this.handleSubmit(false)}
-  //         >
-  //           Reject
-  //         </Button>
-  //       </FormItem>
-  //     </Form>
-  //     </Card>
-  //   );
-  // }
-
   render() {
     const {project, currentStep, isRejected, selectedProviderProfile, match} = this.props;
 
@@ -86,7 +67,7 @@ class ProjectDetail extends Component {
         </Card>
         <ReplyForm currentStep={currentStep} project={project} selectedProviderProfile={selectedProviderProfile} match={match} />
 
-        {renderProjectDetail(project)}
+        {renderProjectDetail(project, isRejected, currentStep)}
       </div>
     );
   }

@@ -24,8 +24,8 @@ export const getProjects = (providerId) => async dispatch => {
   const result = projects.map(project => {
     return {
        name: project.owner.displayName,
-       pickup: project.configuration.addresses.pickUpAddress,
-       delivery: project.configuration.addresses.deliveryAddress,
+       pickup: project.configuration.addresses.formattedPickUpAddress,
+       delivery: project.configuration.addresses.formattedDeliveryAddress,
        pickupDate: project.configuration.dateTime.pickUpDate,
        id: project.id
     };

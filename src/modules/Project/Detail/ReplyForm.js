@@ -50,7 +50,7 @@ const ReplyForm = ({form, submitForm}) => {
           >
             Accept
           </Button>
-          <Button onClick={handleSubmit(false)}
+          <Button style={{margin: "0 20px"}} onClick={handleSubmit(false)}
           >
             Reject
           </Button>
