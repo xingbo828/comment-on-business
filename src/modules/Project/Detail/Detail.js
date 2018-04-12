@@ -27,7 +27,6 @@ const renderSteps = (currentStep, isRejected) => {
 }
 
 class ProjectDetail extends Component {
-
   render() {
     const {project, currentStep, isRejected, selectedProviderProfile, match} = this.props;
 
