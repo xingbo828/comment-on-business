@@ -1,10 +1,9 @@
 import { connect } from 'react-redux';
 import Detail from './Detail';
 import { withRouter } from 'react-router-dom';
-import { compose, lifecycle, withProps } from 'recompose';
-import { getProject as getProjectSelector, getCurrentStep } from '../projectReducer';
-import { getProject, replyToLead } from '../projectAction';
-import { Card, Steps, Form, Input } from 'antd';
+import { compose, lifecycle } from 'recompose';
+import { getProjectDetail as getProjectSelector, getCurrentStep } from './detailReducer';
+import { getProject } from '../projectAction';
 import { getSelectedProviderProfile } from '../../Account/accountReducer';
 import mapImmutablePropsToPlainProps from '../../Common/mapImmutablePropsToPlainProps';
 

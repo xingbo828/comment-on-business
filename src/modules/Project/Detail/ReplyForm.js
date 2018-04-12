@@ -1,14 +1,16 @@
-import React from 'react'
+import React from 'react';
 import { connect } from 'react-redux';
-import { Card, Steps, Form, Input, Button } from 'antd';
+import { Card, Form, Input, InputNumber, Button, Row, Col } from 'antd';
 import { compose, branch, renderNothing, withProps } from 'recompose';
-import { getProject, replyToLead } from '../projectAction';
+import { replyToLead } from '../projectAction';
+
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 8 }
+    sm: { span: 12 }
   },
   wrapperCol: {
     xs: { span: 24 },
@@ -16,7 +18,7 @@ const formItemLayout = {
   }
 };
 
-const ReplyForm = ({form, submitForm}) => {
+const ReplyForm = ({ form, submitForm }) => {
   const handleSubmit = accept => e => {
     e.preventDefault();
     if (accept) {
@@ -30,51 +32,69 @@ const ReplyForm = ({form, submitForm}) => {
   };
   return (
     <Card title="" bordered={false}>
-        <Form onSubmit={handleSubmit(true)} hideRequiredMark >
-          <FormItem {...formItemLayout} label="Estimated Price">
+      <Form onSubmit={handleSubmit(true)} hideRequiredMark>
+        <FormItem {...formItemLayout} label="Estimated Price">
           {form.getFieldDecorator('estimatedPrice', {
-            rules: [{ required: true, message: 'Please input your price!' }],
+            rules: [{ required: true, message: 'Please input your price!' }]
           })(
-            <Input placeholder="Estimated Price" />
+            <InputNumber
+              style={{width: '100%'}}
+              formatter={value =>
+                `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              }
+              parser={value => value.replace(/\$\s?|(,*)/g, '')}
+              placeholder="Estimated Price"
+            />
           )}
         </FormItem>
         <FormItem {...formItemLayout} label="Notes">
           {form.getFieldDecorator('notes')(
-            <Input placeholder="Notes" />
+            <TextArea
+              autosize={{ minRows: 2, maxRows: 6 }}
+              placeholder="Notes"
+            />
           )}
         </FormItem>
-        <FormItem {...formItemLayout}>
-          <Button
-            type="primary"
-            htmlType="submit"
-          >
-            Accept
-          </Button>
-          <Button onClick={handleSubmit(false)}
-          >
-            Reject
-          </Button>
-        </FormItem>
+        <Row>
+          <Col span={24} style={{ textAlign: 'right' }}>
+            <Button type="primary" htmlType="submit">
+              Accept
+            </Button>
+            <Button
+              type="danger"
+              style={{ marginLeft: 8 }}
+              onClick={handleSubmit(false)}
+            >
+              Reject
+            </Button>
+          </Col>
+        </Row>
       </Form>
-      </Card>
-  )
-}
+    </Card>
+  );
+};
 
 const mapDispatchToProps = dispatch => ({
-  getProject: (providerId, projectId) => dispatch(getProject(providerId, projectId)),
-  replyToLead: (providerId, projectId, payload, accept) => dispatch(replyToLead(providerId, projectId, payload, accept)),
+  replyToLead: (providerId, projectId, payload, accept) =>
+    dispatch(replyToLead(providerId, projectId, payload, accept))
 });
 
 const enhance = compose(
   connect(null, mapDispatchToProps),
+  branch(props => props.project.status !== 'LOADED', renderNothing),
   branch(prop => prop.currentStep !== 0, renderNothing),
   withProps(props => ({
     submitForm: async (payload, accept) => {
-      await props.replyToLead({providerId: props.selectedProviderProfile.id, projectId: props.match.params.projectId, payload, accept});
-      await props.getProject(props.selectedProviderProfile.id, props.match.params.projectId);
+      const t = await props.replyToLead({
+        providerId: props.selectedProviderProfile.id,
+        projectId: props.match.params.projectId,
+        payload,
+        accept
+      });
+      console.log('t', t);
     }
   })),
   Form.create({})
 );
 
-export default enhance(ReplyForm)
+export default enhance(ReplyForm);

@@ -11,11 +11,7 @@ const Sidebar = ({ history, location }) => {
     key: '/projects',
     icon: 'schedule',
     text: 'Projects'
-  },{
-    key: '/conversations',
-    icon: 'message',
-    text: 'Conversations'
-  },{
+  }, {
     key: '/company-profile/edit',
     icon: 'profile',
     text: 'Company Profile'

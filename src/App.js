@@ -11,7 +11,7 @@ import Login from './modules/Account/Login';
 import RegisterCompany from './modules/Account/CompanyProfile/Register';
 import EditCompanyProfile from './modules/Account/CompanyProfile/Edit';
 import Project from './modules/Project';
-import Conversation from './modules/Conversation';
+// import Conversation from './modules/Conversation';
 
 class App extends Component {
   render() {
@@ -24,7 +24,7 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <ProtectedRoute path="/register" component={RegisterCompany} />
           <ProtectedRoute path="/projects" component={Project} />
-          <ProtectedRoute path="/conversations" component={Conversation} />
+          {/* <ProtectedRoute path="/conversations" component={Conversation} /> */}
           <ProtectedRoute exact path="/company-profile/edit" component={EditCompanyProfile} />
         </Switch>
       </Router>

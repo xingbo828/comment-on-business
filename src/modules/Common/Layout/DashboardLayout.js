@@ -19,7 +19,7 @@ const DashboardLayout = ({ children, ...rest }) => {
           </div>
         </Header>
         <Content style={{ margin: '24px 16px 0', display: 'flex' }}>
-          <div style={{ padding: 24, background: '#fff', width: '100%' }}>
+          <div style={{ padding: 24, background: '#fff', width: '100%', overflowY: 'scroll'}}>
             {children}
           </div>
         </Content>

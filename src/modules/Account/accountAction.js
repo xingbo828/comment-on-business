@@ -25,7 +25,8 @@ const _uploadLogo = async (logo, providerId) => {
   const imageName = _randomFileName(logo.name);
   const imgRef = imgStorageRef.child(`images/provider/${providerId}/${imageName}`);
   const result = await imgRef.put(logo);
-  return result.downloadURL.replace(imageName, `thumb_${imageName}`);
+  return  result.downloadURL;
+  // return result.downloadURL.replace(imageName, `thumb_${imageName}`);
 };
 
 const _updateUserProviders = async providerRef => {
