@@ -17,18 +17,19 @@ export const getProjects = (providerId) => async dispatch => {
   });
   const projectHttpClient = await createProjectHttpClient(providerId);
   const projects =  await projectHttpClient.getProjects();
-
+  let result;
   if (!projects || !Array.isArray(projects) ) {
-    return [];
+    result = [];
+  } else {
+    result = projects.map(project => {
+      return {
+         customerName: project.owner.displayName,
+         creationDate: moment(project.creationTimestamp),
+         id: project.id,
+         providerStatus: project.receiver.status
+      };
+    }).filter(p => p.providerStatus!=='reject');
   }
-  const result = projects.map(project => {
-    return {
-       customerName: project.owner.displayName,
-       creationDate: moment(project.creationTimestamp),
-       id: project.id,
-       providerStatus: project.receiver.status
-    };
-  }).filter(p => p.providerStatus!=='reject');
 
   dispatch({
     type: GET_MY_PROJECTS_SUCCESS,
