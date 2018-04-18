@@ -1,9 +1,7 @@
 import React from 'react';
 import { Card, Row, Col, Icon } from 'antd';
 import get from 'lodash/get';
-import isNull from 'lodash/isNull';
 import moment from 'moment';
-import { compose, shouldUpdate } from 'recompose';
 
 const ConfigurationDetail = ({ project: { status, projectDetail } }) => {
   return (
@@ -98,9 +96,4 @@ const ConfigurationDetail = ({ project: { status, projectDetail } }) => {
   );
 };
 
-export default compose(
-  shouldUpdate((props, nextProps) => {
-    const update = isNull(props.project.projectDetail);
-    return update;
-  })
-)(ConfigurationDetail);
+export default ConfigurationDetail;
