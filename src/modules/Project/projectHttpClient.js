@@ -18,16 +18,18 @@ const createProjectHttpClient = async (providerId) => {
 
   const replyToLead = (projectId, {
     estimatedPrice,
-    notes
+    notes,
+    pickUpDates
   }) => {
     return projectHttpClient.put(`/projects/${projectId}`, {
       estimatedPrice,
       notes,
+      pickUpDates,
       action: 'accept'
     });
   }
 
-  const declineLead = projectId => 
+  const declineLead = projectId =>
     projectHttpClient.put(`/projects/${projectId}`, {
       action: 'reject'
     });
