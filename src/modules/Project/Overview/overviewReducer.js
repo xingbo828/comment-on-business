@@ -7,7 +7,7 @@ import {
 
 const initState = Immutable.fromJS({
   status: 'UNINIT',
-  projects: null
+  projects: []
 });
 
 
@@ -16,7 +16,6 @@ export default (state = initState, action) => {
     case GET_MY_PROJECTS_PENDING: {
       return state.withMutations(st => {
         st.set('status', 'PENDING');
-        st.set('projects', null);
       });
     }
 
@@ -30,7 +29,6 @@ export default (state = initState, action) => {
     case GET_MY_PROJECTS_FAIL: {
       return state.withMutations(st => {
         st.set('status', 'FAILED');
-        st.set('projects', null);
       });
     }
 

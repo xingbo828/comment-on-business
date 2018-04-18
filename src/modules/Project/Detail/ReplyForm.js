@@ -1,22 +1,22 @@
 import React from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { Card, Form, Input, InputNumber, Button, Row, Col, Checkbox } from 'antd';
+import { Card, Form, Input, InputNumber, Button, Row, Col, Select } from 'antd';
 import { compose, branch, renderNothing, withProps } from 'recompose';
 import { replyToLead } from '../projectAction';
 
 const FormItem = Form.Item;
-const CheckboxGroup = Checkbox.Group;
 const { TextArea } = Input;
+const Option = Select.Option;
 
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
-    sm: { span: 12 }
+    sm: { span: 4 }
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 12 }
+    sm: { span: 20 }
   }
 };
 
@@ -69,7 +69,15 @@ const ReplyForm = ({ form, submitForm, project }) => {
           {form.getFieldDecorator('pickUpDates', {
             rules: [{ required: true, message: 'Please input your pickup date!' }]
           })(
-            <CheckboxGroup options={dateOptions} />
+            <Select
+            mode="tags"
+            placeholder="Please select"
+            style={{ width: '100%' }}
+            showArrow
+            tokenSeparators={[',']}
+          >
+            {dateOptions.map(date => <Option key={date.value} value={date.value}>{date.label}</Option>)}
+          </Select>
           )}
         </FormItem>
         <Row>
@@ -99,16 +107,15 @@ const mapDispatchToProps = dispatch => ({
 const enhance = compose(
   connect(null, mapDispatchToProps),
   branch(props => props.project.status !== 'LOADED', renderNothing),
-  branch(prop => prop.currentStep !== 0, renderNothing),
+  branch(({ project: { projectDetail }}) => !(projectDetail.status === 'created' && projectDetail.receiver.status === 'sent'), renderNothing),
   withProps(props => ({
     submitForm: async (payload, accept) => {
-      const t = await props.replyToLead({
+      await props.replyToLead({
         providerId: props.selectedProviderProfile.id,
         projectId: props.match.params.projectId,
         payload,
         accept
       });
-      console.log('t', t);
     }
   })),
   Form.create({})

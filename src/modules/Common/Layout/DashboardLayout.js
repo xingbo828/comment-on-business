@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout } from 'antd';
 
-// import Breadcrumb from './BreadcrumbContainer';
+import Breadcrumb from './BreadcrumbContainer';
 import ProfileDropDown from './ProfileDropdown';
 import Sidebar from './Sidebar';
 
@@ -13,7 +13,7 @@ const DashboardLayout = ({ children, ...rest }) => {
       <Sidebar />
       <Layout>
         <Header style={{ background: '#fff', padding: '0 12px 0 40px' }}>
-          {/* <Breadcrumb /> */}
+          <Breadcrumb />
           <div style={{ float: 'right' }}>
             <ProfileDropDown />
           </div>

@@ -26,9 +26,10 @@ export const getProjects = (providerId) => async dispatch => {
          customerName: project.owner.displayName,
          creationDate: moment(project.creationTimestamp),
          id: project.id,
-         providerStatus: project.receiver.status
+         providerStatus: project.receiver.status,
+         projectStatus: project.status
       };
-    }).filter(p => p.providerStatus!=='reject');
+    });
   }
 
   dispatch({
@@ -50,7 +51,8 @@ export const replyToLead = ({providerId, projectId, payload, accept}) => async d
 
 export const getProject = (providerId, projectId) => async dispatch => {
   dispatch({
-    type: GET_MY_PROJECT_DETAIL_PENDING
+    type: GET_MY_PROJECT_DETAIL_PENDING,
+    projectId
   });
   const projectHttpClient = await createProjectHttpClient(providerId);
   const project =  await projectHttpClient.getProject(projectId);
@@ -58,11 +60,12 @@ export const getProject = (providerId, projectId) => async dispatch => {
   if (project.error || !project.receiver) {
     return dispatch({
       type: GET_MY_PROJECT_DETAIL_FAIL,
-
+      projectId
     });
   }
   dispatch({
     type: GET_MY_PROJECT_DETAIL_SUCCESS,
     data: project,
+    projectId
   });
 };
