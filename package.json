@@ -11,6 +11,7 @@
     "moment": "^2.22.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-lz-editor": "^0.12.1",
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
@@ -23,10 +24,19 @@
     "reselect": "^3.0.1",
     "styled-components": "^3.1.6"
   },
+  "devDependencies": {
+    "@storybook/addon-actions": "^3.3.12",
+    "@storybook/addon-links": "^3.3.12",
+    "@storybook/react": "^3.3.12",
+    "@storybook/addon-info": "^3.3.12",
+    "@storybook/addon-knobs": "^3.3.12"
+  },
   "scripts": {
     "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public -o docs"
   }
 }
