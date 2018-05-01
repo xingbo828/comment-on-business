@@ -28,6 +28,18 @@ class CompanyProfile extends Component {
     });
   };
 
+  getActiveTab = () => {
+    if (this.props.isRegistering) {
+      return 'basic';
+    }
+
+    if (!has(this.props.location, 'state.tab')) {
+      return 'basic';
+    }
+
+    return this.props.location.state.tab;
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -54,31 +66,51 @@ class CompanyProfile extends Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 }
+        sm: { span: 24 },
+        md: { span: 6 },
+        lg: { span: 4 },
+        xl: { span: 4 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 14 }
+        sm: { span: 24 },
+        md: { span: 16 },
+        lg: { span: 18 },
+        xl: { span: 16 }
       }
     };
 
     const metaFormItemLayout = {
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 12, offset: 6 }
+        sm: { span: 24 },
+        md: { span: 20, offset: 2 },
+        lg: { span: 16, offset: 4 },
+        xl: { span: 14, offset: 5 }
       }
     };
 
-
     const tailFormItemLayout = {
       wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0
-        },
-        sm: {
-          span: 16,
+        md: {
           offset: 6
+        },
+        lg: {
+          offset: 4
+        }
+      }
+    };
+
+    const metaTailFormItemLayout = {
+      wrapperCol: {
+        md: {
+          offset: 2
+        },
+        lg: {
+          offset: 4
+        },
+        xl: {
+          offset: 5
         }
       }
     };
@@ -117,23 +149,15 @@ class CompanyProfile extends Component {
       );
     };
 
-    const getActiveTab = () => {
-      if(this.props.isRegistering) {
-        return 'basic';
-      }
-
-      if(!has(this.props.location, 'state.tab')) {
-        return 'basic';
-      }
-
-      return this.props.location.state.tab;
-    }
-
     return (
       <Spin spinning={this.props.isSubmitting}>
         <Form onSubmit={this.handleSubmit}>
-          <Tabs defaultActiveKey={getActiveTab()} tabPosition="top">
-            <TabPane tab="Basic information" key="basic">
+          <Tabs defaultActiveKey={this.getActiveTab()} tabPosition="top">
+            <TabPane
+              tab="Basic information (Required)"
+              key="basic"
+              style={{ paddingTop: 20 }}
+            >
               <FormItem {...formItemLayout} label="Business Name" hasFeedback>
                 {getFieldDecorator('name', {
                   rules: [
@@ -189,27 +213,62 @@ class CompanyProfile extends Component {
                   ]
                 })(<RichEditor />)}
               </FormItem>
+              <FormItem {...tailFormItemLayout}>
+                <Button
+                  size="large"
+                  icon="save"
+                  type="primary"
+                  htmlType="submit"
+                >
+                  Save
+                </Button>
+              </FormItem>
             </TabPane>
-            {!isRegistering && <TabPane tab="Payment methods" key="payment-methods">
-              <FormItem
-                {...metaFormItemLayout}
+            {!isRegistering && (
+              <TabPane
+                tab="Payment methods"
+                key="payment-methods"
+                style={{ paddingTop: 20 }}
               >
-                 {getFieldDecorator('paymentMethods')(<PaymentMethods />)}
-              </FormItem>
-            </TabPane>}
-            {!isRegistering &&<TabPane tab="Connect to review services" key="review">
-              <FormItem
-                {...metaFormItemLayout}
+                <FormItem {...metaFormItemLayout}>
+                  {getFieldDecorator('paymentMethods')(<PaymentMethods />)}
+                </FormItem>
+                <FormItem {...metaTailFormItemLayout}>
+                  <Button
+                    size="large"
+                    icon="save"
+                    type="primary"
+                    htmlType="submit"
+                  >
+                    Save
+                  </Button>
+                </FormItem>
+              </TabPane>
+            )}
+            {!isRegistering && (
+              <TabPane
+                tab="Connect to review services"
+                key="review"
+                style={{ paddingTop: 20 }}
               >
-                 {getFieldDecorator('reviewInfo')(<ReviewInfo google={window.google} />)}
-              </FormItem>
-            </TabPane>}
+                <FormItem {...metaFormItemLayout}>
+                  {getFieldDecorator('reviewInfo')(
+                    <ReviewInfo google={window.google} />
+                  )}
+                </FormItem>
+                <FormItem {...metaTailFormItemLayout}>
+                  <Button
+                    size="large"
+                    icon="save"
+                    type="primary"
+                    htmlType="submit"
+                  >
+                    Save
+                  </Button>
+                </FormItem>
+              </TabPane>
+            )}
           </Tabs>
-          <FormItem {...tailFormItemLayout}>
-            <Button size="large" icon="save" type="primary" htmlType="submit">
-              Save
-            </Button>
-          </FormItem>
         </Form>
       </Spin>
     );

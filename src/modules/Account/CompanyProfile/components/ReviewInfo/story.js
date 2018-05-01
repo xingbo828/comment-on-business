@@ -3,7 +3,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
-import ReviewInfo from './ReviewInfo';
+import ReviewInfo from './';
 
 const onChange = console.log
 const value = { 
