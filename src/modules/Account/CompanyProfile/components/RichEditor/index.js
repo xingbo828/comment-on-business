@@ -4,9 +4,14 @@ import styled from 'styled-components';
 
 const EditorContainer = styled.div`
   display: inline-block;
+  width: 100%;
   > .RichEditor-root {
     z-index: 0;
     overflow: unset;
+  }
+
+  .RichEditor-controls:last-child {
+    display: none;
   }
 `;
 
@@ -29,12 +34,17 @@ class RichEditor extends Component {
           lang={'en'}
           importContent={this.state.initContent}
           cbReceiver={this.receiveMarkdown}
+          pasteNoStyle={false}
+          inlineStyle={false}
           image={false}
           video={false}
           audio={false}
           fullScreen={false}
           color={false}
           autoSave={false}
+          urls={false}
+          undoRedo={false}
+          removeStyle={false}
           convertFormat="markdown"
         />
       </EditorContainer>

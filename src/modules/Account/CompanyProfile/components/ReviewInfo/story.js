@@ -6,7 +6,13 @@ import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
 import ReviewInfo from './ReviewInfo';
 
 const onChange = console.log
-const ReviewInfoDemo = () => <div style={{margin: 'auto', width: '600px'}}><ReviewInfo onChange={onChange}/></div>
+const value = { 
+  googleInfo: { 
+    desc: 'whatever',
+    placeId: 'adfadf'
+  }
+}
+const ReviewInfoDemo = () => <div style={{margin: 'auto', width: '600px'}}><ReviewInfo value={value} onChange={onChange} google={window.google} /></div>
 
 export default storiesOf('Profile', module)
 .addDecorator(withKnobs)

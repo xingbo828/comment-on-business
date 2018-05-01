@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Input, Upload, Button, Icon, Spin, Tabs } from 'antd';
 import isString from 'lodash/isString';
 import isArray from 'lodash/isArray';
+import has from 'lodash/has';
 import RichEditor from './components/RichEditor';
 import PaymentMethods from './components/PaymentMethods';
 import ReviewInfo from './components/ReviewInfo';
@@ -46,17 +47,18 @@ class CompanyProfile extends Component {
   };
 
   render() {
+    const { isRegistering } = this.props;
     const { getFieldDecorator, getFieldProps } = this.props.form;
     const { logoSelected } = this.state;
 
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 8 }
+        sm: { span: 6 }
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 12 }
+        sm: { span: 14 }
       }
     };
 
@@ -76,7 +78,7 @@ class CompanyProfile extends Component {
         },
         sm: {
           span: 16,
-          offset: 8
+          offset: 6
         }
       }
     };
@@ -115,10 +117,22 @@ class CompanyProfile extends Component {
       );
     };
 
+    const getActiveTab = () => {
+      if(this.props.isRegistering) {
+        return 'basic';
+      }
+
+      if(!has(this.props.location, 'state.tab')) {
+        return 'basic';
+      }
+
+      return this.props.location.state.tab;
+    }
+
     return (
       <Spin spinning={this.props.isSubmitting}>
         <Form onSubmit={this.handleSubmit}>
-          <Tabs defaultActiveKey="basic" tabPosition="top">
+          <Tabs defaultActiveKey={getActiveTab()} tabPosition="top">
             <TabPane tab="Basic information" key="basic">
               <FormItem {...formItemLayout} label="Business Name" hasFeedback>
                 {getFieldDecorator('name', {
@@ -176,21 +190,23 @@ class CompanyProfile extends Component {
                 })(<RichEditor />)}
               </FormItem>
             </TabPane>
-            <TabPane tab="Meta information" key="meta">
+            {!isRegistering && <TabPane tab="Payment methods" key="payment-methods">
               <FormItem
                 {...metaFormItemLayout}
               >
                  {getFieldDecorator('paymentMethods')(<PaymentMethods />)}
               </FormItem>
+            </TabPane>}
+            {!isRegistering &&<TabPane tab="Connect to review services" key="review">
               <FormItem
                 {...metaFormItemLayout}
               >
-                 {getFieldDecorator('reviewInfo')(<ReviewInfo />)}
+                 {getFieldDecorator('reviewInfo')(<ReviewInfo google={window.google} />)}
               </FormItem>
-            </TabPane>
+            </TabPane>}
           </Tabs>
           <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">
+            <Button size="large" icon="save" type="primary" htmlType="submit">
               Save
             </Button>
           </FormItem>

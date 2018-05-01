@@ -31,13 +31,17 @@ const enhance = compose(
     }
   ),
   withProps(props => ({
+    isRegistering: true,
     submitForm: async (providerInfo) => {
       console.log(props)
       props.updateIsSubmitting(true)
       await props.createProvider(providerInfo);
       props.updateIsSubmitting(false)
       props.history.push({
-        pathname: '/'
+        pathname: '/company-profile/edit',
+        state: {
+          tab: 'payment-methods'
+        }
       })
     }
   })),

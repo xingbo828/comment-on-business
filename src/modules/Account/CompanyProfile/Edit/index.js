@@ -30,6 +30,7 @@ const enhance = compose(
     }
   ),
   withProps(props => ({
+    isRegistering: false,
     submitForm: async (providerInfo) => {
       props.updateIsSubmitting(true)
       await props.editProvider(props.selectedProviderProfile.id, providerInfo);
@@ -46,7 +47,7 @@ const enhance = compose(
         description: Form.createFormField({ value: selectedProviderProfile.description }),
         logo: Form.createFormField({ value: selectedProviderProfile.logo }),
         paymentMethods: Form.createFormField({ value: selectedProviderProfile.paymentMethods }),
-        reviewInfo: Form.createFormField({ value: selectedProviderProfile.reviewInfo })
+        reviewInfo: Form.createFormField({ value: selectedProviderProfile.reviewInfo || {} })
       };
     }
   })
