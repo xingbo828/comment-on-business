@@ -39,8 +39,9 @@ class ReviewInfo extends Component {
 
   handleGoogleSearch = searchQuery => {
     const selector = (data) => data.map(d => ({
-      title: d.description,
-      id: d.place_id
+      id: d.place_id,
+      title: d.structured_formatting.main_text,
+      address: d.structured_formatting.secondary_text
     }));
     if (searchQuery.length >= 3) {
       const request = {
@@ -57,8 +58,9 @@ class ReviewInfo extends Component {
 
   handleYelpSearch = async (searchQuery) => {
     const selector = (data) => data.map(d => ({
+      id: d.id,
       title: d.name,
-      id: d.id
+      address: d.address
     }));
     if (searchQuery.length >= 3) {
       const searchResult = await this.props.searchYelpBusiness(searchQuery);
@@ -69,7 +71,7 @@ class ReviewInfo extends Component {
   handleSelect = type => (v, ins) => {
     const { value, onChange } = this.props;
     const updatedValue = Object.assign({}, value, {
-      [type]: { desc: ins.props.children, id: ins.props.value }
+      [type]: { title: ins.key, id: ins.props.value }
     });
     onChange(updatedValue);
   };
@@ -81,11 +83,20 @@ class ReviewInfo extends Component {
   }
 
   renderGoogleSearch = () => {
-    const options = this.state.dataSource.google.map(opt => (
-      <Option key={opt.title} value={opt.id}>
-        {opt.title}
+    const options = this.state.dataSource.google.map((opt, index) => {
+      const isFirstItem = index === 0;
+      const defaultStyle = {
+        paddingTop: '1rem',
+        paddingBottom: '.5rem'
+      };
+      const style = !isFirstItem ?  Object.assign({}, defaultStyle, { borderTop: '1px solid #ccc'}) : defaultStyle;
+      return (
+      <Option key={opt.title} value={opt.id} style={style}>
+        <p><strong>{opt.title}</strong></p>
+        <p>{opt.address}</p>
       </Option>
-    ));
+      );
+    });
     return (
       <Row type="flex" justify="space-around" align="middle">
         <Col span={6}><img width="100" src={googleLogo} alt="Google Business" /></Col>
@@ -113,11 +124,20 @@ class ReviewInfo extends Component {
   };
 
   renderYelpSearch = () => {
-    const options = this.state.dataSource.yelp.map(opt => (
-      <Option key={opt.title} value={opt.id}>
-        {opt.title}
+    const options = this.state.dataSource.yelp.map((opt, index) => {
+      const isFirstItem = index === 0;
+      const defaultStyle = {
+        paddingTop: '1rem',
+        paddingBottom: '.5rem'
+      };
+      const style = !isFirstItem ?  Object.assign({}, defaultStyle, { borderTop: '1px solid #ccc'}) : defaultStyle;
+      return (
+      <Option key={opt.title} value={opt.id} style={style}>
+        <p><strong>{opt.title}</strong></p>
+        <p>{opt.address}</p>
       </Option>
-    ));
+      );
+    });
     return (
       <Row type="flex" justify="space-around" align="middle">
         <Col span={6}><img width="100" src={yelpLogo} alt="Yelp Business" /></Col>
@@ -136,7 +156,7 @@ class ReviewInfo extends Component {
           </AutoComplete>
         </Col>
         <Col offset={1} span={1}>
-          <Tooltip title="Find your business from Google places so that we can pull your business reviews.">
+          <Tooltip title="Find your business from Yelp so that we can pull your business reviews.">
             <Icon type="question-circle-o" style={{ fontSize: 18 }} />
           </Tooltip>
         </Col>
@@ -147,7 +167,7 @@ class ReviewInfo extends Component {
   renderGoogleSelectionResult = googleInfo => (
     <Row type="flex" justify="space-around" align="middle">
       <Col span={6}><img width="100" src={googleLogo} alt="Google Business" /></Col>
-      <Col span={16}><strong>{googleInfo.desc}</strong></Col>
+      <Col span={16}><strong>{googleInfo.title}</strong></Col>
       <Col offset={1} span={1}>
         <Button onClick={this.handleRemove('googleInfo')} shape="circle" icon="delete" type="danger" />
       </Col>
@@ -157,7 +177,7 @@ class ReviewInfo extends Component {
   renderYelpSelectionResult = yelpInfo => (
     <Row type="flex" justify="space-around" align="middle">
       <Col span={6}><img width="100" src={yelpLogo} alt="Yelp Business" /></Col>
-      <Col span={16}><strong>{yelpInfo.desc}</strong></Col>
+      <Col span={16}><strong>{yelpInfo.title}</strong></Col>
       <Col offset={1} span={1}>
         <Button onClick={this.handleRemove('yelpInfo')} shape="circle" icon="delete" type="danger" />
       </Col>

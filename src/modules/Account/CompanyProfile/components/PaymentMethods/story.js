@@ -6,7 +6,7 @@ import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
 import PaymentMethods from './PaymentMethods';
 
 
-const PaymentMethodsDemo = () => <div style={{margin: 'auto', width: '500px'}}><PaymentMethods /></div>
+const PaymentMethodsDemo = () => <div style={{margin: 'auto', width: '800px'}}><PaymentMethods /></div>
 
 export default storiesOf('Profile', module)
 .addDecorator(withKnobs)

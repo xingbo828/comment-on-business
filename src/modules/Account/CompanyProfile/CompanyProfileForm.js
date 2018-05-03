@@ -253,7 +253,7 @@ class CompanyProfile extends Component {
               >
                 <FormItem {...metaFormItemLayout}>
                   {getFieldDecorator('reviewInfo')(
-                    <ReviewInfo google={window.google} />
+                    <ReviewInfo />
                   )}
                 </FormItem>
                 <FormItem {...metaTailFormItemLayout}>

@@ -8,7 +8,8 @@ const enhance = compose(
   withProps(({ value }) => ({
     searchYelpBusiness: searchBusiness,
     hasGoogleInfo: has(value, 'googleInfo'),
-    hasYelpInfo: has(value, 'yelpInfo')
+    hasYelpInfo: has(value, 'yelpInfo'),
+    google: window.google
   })),
 );
 
