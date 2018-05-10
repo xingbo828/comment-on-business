@@ -54,8 +54,10 @@ const _updateProviderProfile = async (providerId, providerInfo, dispatch) => {
   const providerData = providerDataPromise.data();
   return dispatch({
     type: UPDATE_PROFILE,
-    field: 'providers',
-    data: {providers: [{ ...providerData, id: providerId }]}
+    data: {
+      providerId: providerId,
+      providerInfo: { ...providerData, id: providerId }
+    }
   })
 }
 
@@ -63,7 +65,8 @@ export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const createProvider = providerInfo => async dispatch => {
   const providerDocRef = await providerCollectionRef.add({});
   const providerId = providerDocRef.id;
-  return await _updateProviderProfile(providerId, providerInfo, dispatch);
+  await _updateProviderProfile(providerId, providerInfo, dispatch);
+  return await setDefaultProvider(providerId)(dispatch)
 };
 
 export const editProvider = (providerId, providerInfo) => async dispatch => {
@@ -77,7 +80,8 @@ export const setDefaultProvider = providerId => async dispatch => {
   const userDocRef = userCollectionRef.doc(uid);
   await userDocRef.update({ defaultProvider: providerId });
   dispatch({
-    type: DEFAULT_PROVIDER_CHANGE
+    type: DEFAULT_PROVIDER_CHANGE,
+    data: providerId
   })
 }
 

@@ -18,13 +18,13 @@ const ProjectOverview = ({ projectsOverview: { projects, status } }) => {
   };
   const activeProjectsColumns = [
     {
-      title: 'ID',
-      dataIndex: 'id'
-    },
-    {
       title: 'Customer',
       dataIndex: 'customerName',
       sorter: (a, b) => a.customerName > b.customerName
+    },
+    {
+      title: 'ID',
+      dataIndex: 'id'
     },
     {
       title: 'Status',
@@ -66,15 +66,29 @@ const ProjectOverview = ({ projectsOverview: { projects, status } }) => {
     },
   ];
 
+  const renderArchivedStatus = (project) => {
+    if (project.providerStatus === 'reject') {
+      return <Badge status="error" text="Reject by you" />;
+    } else if (project.projectStatus === 'rejected') {
+      return <Badge status="default" text="Project is closed" />;
+    } 
+    return null;
+  }
+
   const archivedProjectsColumns = [
+    {
+      title: 'Customer',
+      dataIndex: 'customerName',
+      sorter: (a, b) => a.customerName > b.customerName
+    },
     {
       title: 'ID',
       dataIndex: 'id'
     },
     {
-      title: 'Customer',
-      dataIndex: 'customerName',
-      sorter: (a, b) => a.customerName > b.customerName
+      title: 'Status',
+      dataIndex: 'providerStatus',
+      render: (text, project) => renderArchivedStatus(project)
     },
     {
       title: 'Creation date',
@@ -103,6 +117,7 @@ const ProjectOverview = ({ projectsOverview: { projects, status } }) => {
         <TabPane tab="Active projects" key="active">
           <Table
             loading={status === 'PENDING'}
+            pagination={{ pageSize: 10 }}
             rowKey={record => record.id}
             dataSource={activeProjects}
             columns={activeProjectsColumns}
@@ -114,7 +129,8 @@ const ProjectOverview = ({ projectsOverview: { projects, status } }) => {
             rowKey={record => record.id}
             dataSource={archivedProjects}
             columns={archivedProjectsColumns}
-            />
+            pagination={{ pageSize: 10 }}
+          />
         </TabPane>
       </Tabs>
 

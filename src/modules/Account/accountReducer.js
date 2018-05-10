@@ -1,4 +1,5 @@
 import Immutable from 'immutable';
+import isUndefined from 'lodash/isUndefined';
 import { createSelector } from 'reselect';
 import { USER_LOGIN, USER_LOGOUT } from './onAuthChangeAction';
 import { UPDATE_PROFILE, DEFAULT_PROVIDER_CHANGE } from './accountAction';
@@ -22,13 +23,22 @@ export default (state = initState, action) => {
       });
     case UPDATE_PROFILE:
       return state.withMutations((st) => {
-        const newData = Immutable.fromJS(action.data);
-        const newProfile = st.get('user').mergeDeep(newData);
-        st.set('user', newProfile);
+        const providerId = action.data.providerId;
+        const index = st.getIn(['user', 'providers']).findKey(o => o.get('id') === providerId)
+        // Is new provider info
+        if(isUndefined(index)) {
+          const newProviderList = st.getIn(['user', 'providers']).push(Immutable.fromJS(action.data.providerInfo));
+          st.setIn(['user', 'providers'], newProviderList)
+        } 
+        // update existing provider info
+        else {
+          st.setIn(['user', 'providers', index], Immutable.fromJS(action.data.providerInfo))
+        }
       });
     case DEFAULT_PROVIDER_CHANGE:
-      window.location.reload();
-      return state;
+      return state.withMutations((st) => {
+        st.setIn(['user', 'defaultProvider'], action.data);
+      });
 
     default:
       return state;
@@ -47,15 +57,13 @@ export const isLoggedin = createSelector(
 export const getSelectedProviderProfile = state => {
   const user = state.getIn(['account', 'user']);
   const defaultProviderId = user.get('defaultProvider');
-  if(defaultProviderId) {
-    const providerProfile = user.get('providers').find(p => {
-      return p.get('id') === defaultProviderId
-    });
-    if(providerProfile) {
-      return { selectedProviderProfile: providerProfile }
-    }
+  const providerProfile = user.get('providers').find(p => {
+    return p.get('id') === defaultProviderId
+  });
+  if(isUndefined(providerProfile)) {
+    return { selectedProviderProfile: user.getIn(['providers', 0 ]) }
   }
-  return { selectedProviderProfile: user.getIn(['providers', 0]) }
+  return { selectedProviderProfile: providerProfile }
 }
 
 export const getAvailableProviderProfiles = state => {

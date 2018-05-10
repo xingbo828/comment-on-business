@@ -63,7 +63,7 @@ class ReviewInfo extends Component {
       address: d.address
     }));
     if (searchQuery.length >= 3) {
-      const searchResult = await this.props.searchYelpBusiness(searchQuery);
+      const searchResult = await this.props.searchYelpBusiness({term: searchQuery});
       this.updateDataSource('yelp', selector)(searchResult)
     }
   };

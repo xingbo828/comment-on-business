@@ -1,13 +1,11 @@
 import React from 'react';
-import moment from 'moment';
 import { connect } from 'react-redux';
-import { Card, Form, Input, InputNumber, Button, Row, Col, Select } from 'antd';
+import { Card, Form, Input, InputNumber, Button, Row, Col } from 'antd';
 import { compose, branch, renderNothing, withProps } from 'recompose';
 import { replyToLead } from '../projectAction';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
-const Option = Select.Option;
 
 const formItemLayout = {
   labelCol: {
@@ -21,14 +19,6 @@ const formItemLayout = {
 };
 
 const ReplyForm = ({ form, submitForm, project }) => {
-  const dateOptions = project.projectDetail.configuration.date.pickUpDate.map(date => {
-    return moment(date);
-  }).sort((left, right) => {
-    return left - right;
-  }).map(date => {
-    return {label: date.format('dddd, MMMM Do YYYY'), value: date.format('YYYYMMDD')};
-  });
-
   const handleSubmit = accept => e => {
     e.preventDefault();
     if (accept) {
@@ -63,21 +53,6 @@ const ReplyForm = ({ form, submitForm, project }) => {
               autosize={{ minRows: 2, maxRows: 6 }}
               placeholder="Notes"
             />
-          )}
-        </FormItem>
-        <FormItem {...formItemLayout} label="Pick Up Dates">
-          {form.getFieldDecorator('pickUpDates', {
-            rules: [{ required: true, message: 'Please input your pickup date!' }]
-          })(
-            <Select
-            mode="tags"
-            placeholder="Please select"
-            style={{ width: '100%' }}
-            showArrow
-            tokenSeparators={[',']}
-          >
-            {dateOptions.map(date => <Option key={date.value} value={date.value}>{date.label}</Option>)}
-          </Select>
           )}
         </FormItem>
         <Row>
