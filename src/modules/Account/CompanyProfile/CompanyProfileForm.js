@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Upload, Button, Icon, Spin, Tabs } from 'antd';
+import { Form, Input, Upload, Button, Icon, Spin, Tabs, AutoComplete } from 'antd';
 import isString from 'lodash/isString';
 import isArray from 'lodash/isArray';
 import has from 'lodash/has';
@@ -9,10 +9,12 @@ import ReviewInfo from './components/ReviewInfo';
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
+const AutoCompleteOption = AutoComplete.Option;
 
 class CompanyProfile extends Component {
   state = {
-    logoSelected: false
+    logoSelected: false,
+    autoCompleteResult: []
   };
 
   normFile = e => {
@@ -40,6 +42,18 @@ class CompanyProfile extends Component {
     return this.props.location.state.tab;
   };
 
+  handleWebsiteChange = (value) => {
+    let autoCompleteResult;
+    if (!value) {
+      autoCompleteResult = [];
+    } else {
+      autoCompleteResult = ['.com', '.ca', '.org', '.net'].map(domain => `${value}${domain}`);
+    }
+    this.setState({ autoCompleteResult });
+  }
+
+  
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -61,7 +75,11 @@ class CompanyProfile extends Component {
   render() {
     const { isRegistering } = this.props;
     const { getFieldDecorator, getFieldProps } = this.props.form;
-    const { logoSelected } = this.state;
+    const { logoSelected, autoCompleteResult } = this.state;
+
+    const websiteOptions = autoCompleteResult.map(website => (
+      <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
+    ));
 
     const formItemLayout = {
       labelCol: {
@@ -201,6 +219,27 @@ class CompanyProfile extends Component {
                     }
                   ]
                 })(<Input />)}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label="Website" hasFeedback>
+                {getFieldDecorator('website', {
+                  rules: [
+                    {
+                      required: false,
+                      message: 'Please input your business website'
+                    }
+                  ]
+                })(
+
+                  <AutoComplete
+                    dataSource={websiteOptions}
+                    onChange={this.handleWebsiteChange}
+                    placeholder="website"
+                  >
+                    <Input addonBefore="Http://"/>
+                  </AutoComplete>
+                  
+                  )}
               </FormItem>
 
               <FormItem {...formItemLayout} label="Description" hasFeedback>

@@ -44,6 +44,7 @@ const enhance = compose(
         name: Form.createFormField({ value: selectedProviderProfile.name }),
         email: Form.createFormField({ value: selectedProviderProfile.email }),
         phoneNumber: Form.createFormField({ value: selectedProviderProfile.phoneNumber }),
+        website: Form.createFormField({ value: selectedProviderProfile.website }),
         description: Form.createFormField({ value: selectedProviderProfile.description }),
         logo: Form.createFormField({ value: selectedProviderProfile.logo }),
         paymentMethods: Form.createFormField({ value: selectedProviderProfile.paymentMethods || {} }),
