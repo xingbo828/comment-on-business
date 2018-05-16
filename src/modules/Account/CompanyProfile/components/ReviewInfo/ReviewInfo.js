@@ -115,7 +115,7 @@ class ReviewInfo extends Component {
           </AutoComplete>
         </Col>
         <Col offset={1} span={1}>
-          <Tooltip title="Find your business from Google places so that we can pull your business reviews.">
+          <Tooltip trigger="click" title="Find your business from Google places so that we can pull your business reviews.">
             <Icon type="question-circle-o" style={{ fontSize: 18 }} />
           </Tooltip>
         </Col>
@@ -156,7 +156,7 @@ class ReviewInfo extends Component {
           </AutoComplete>
         </Col>
         <Col offset={1} span={1}>
-          <Tooltip title="Find your business from Yelp so that we can pull your business reviews.">
+          <Tooltip trigger="click" title="Find your business from Yelp so that we can pull your business reviews.">
             <Icon type="question-circle-o" style={{ fontSize: 18 }} />
           </Tooltip>
         </Col>

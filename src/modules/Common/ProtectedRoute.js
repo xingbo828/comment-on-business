@@ -27,8 +27,8 @@ const ProtectedRoute = ({
 );
 
 const renderLoggedInView = (props, { user, history }) => (Component) => {
-  if (history.location.pathname !== '/register' && (!user.providers || user.providers.length === 0)) {
-    message.info('Doesn\'t seem like you have a component registered. Let\'s get started', 5);
+  if (history.location.pathname !== '/register' && (!user.providers || Object.keys(user.providers).length === 0)) {
+    message.info('Doesn\'t seem like you have a company registered. Let\'s get started', 5);
     return (<Redirect
       to={{
         pathname: '/register',

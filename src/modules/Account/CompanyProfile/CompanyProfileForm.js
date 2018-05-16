@@ -236,7 +236,7 @@ class CompanyProfile extends Component {
                     onChange={this.handleWebsiteChange}
                     placeholder="website"
                   >
-                    <Input addonBefore="Http://"/>
+                    <Input addonBefore="Http://" />
                   </AutoComplete>
                   
                   )}

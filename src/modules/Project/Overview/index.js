@@ -23,8 +23,13 @@ const enhance = compose(
   lifecycle({
     componentDidMount() {
       this.props.getProjects(this.props.selectedProviderProfile.id);
+    },
+    componentWillReceiveProps(nextProps) {
+      if(this.props.selectedProviderProfile.id !== nextProps.selectedProviderProfile.id) {
+        this.props.getProjects(nextProps.selectedProviderProfile.id);
+      }
     }
-  }),
+  })
 );
 export default enhance(Overview);
 

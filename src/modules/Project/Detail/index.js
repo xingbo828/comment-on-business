@@ -26,10 +26,14 @@ const enhance = compose(
       if(isUndefined(this.props.project)) {
         this.props.getProject(this.props.selectedProviderProfile.id, this.props.match.params.projectId);
       }
+    },
+    componentWillReceiveProps(nextProps) {
+      if(this.props.selectedProviderProfile.id !== nextProps.selectedProviderProfile.id) {
+        this.props.getProjects(nextProps.selectedProviderProfile.id);
+      }
     }
   }),
   branch(props => {
-    console.log(props.project)
     return isUndefined(props.project)
   }, renderNothing)
 );

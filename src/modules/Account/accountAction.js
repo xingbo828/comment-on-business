@@ -5,6 +5,7 @@ import {
 } from '../../firebaseClient';
 import isUndefined from 'lodash/isUndefined';
 import omit from 'lodash/omit';
+import omitBy from 'lodash/omitBy';
 
 const providerCollectionRef = firestore.collection('providers');
 const userCollectionRef = firestore.collection('users');
@@ -48,7 +49,8 @@ const _updateProviderProfile = async (providerId, providerInfo, dispatch) => {
     logo
   });
   const providerDocRef = providerCollectionRef.doc(providerId);
-  providerDocRef.update(updatedProviderInfo);
+  const updatedProviderInfoWithoutUndefined = omitBy(updatedProviderInfo, isUndefined);
+  providerDocRef.update(updatedProviderInfoWithoutUndefined);
   await _updateUserProviders(providerDocRef);
   const providerDataPromise = await providerDocRef.get();
   const providerData = providerDataPromise.data();

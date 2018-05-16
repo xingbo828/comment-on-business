@@ -24,6 +24,11 @@ export default (state = initState, action) => {
     case UPDATE_PROFILE:
       return state.withMutations((st) => {
         const providerId = action.data.providerId;
+        // if user hook hasn't got a chance to run, set user => providers => to be new list.
+        if(!st.hasIn(['user', 'providers'])) {
+          st.setIn(['user', 'providers'], Immutable.List())
+        }
+
         const index = st.getIn(['user', 'providers']).findKey(o => o.get('id') === providerId)
         // Is new provider info
         if(isUndefined(index)) {
@@ -51,7 +56,7 @@ export const getUser = (state) => ({ user: state.getIn(['account', 'user'])});
 export const getAccount = state => ({ account: state.get('account') });
 
 export const isLoggedin = createSelector(
-  [ getAccount ], ({ account }) => ({ isLoggedIn: account.get('user').size > 0, user: account.get('user'), loginStatus: account.get('status')})
+  [ getAccount ], ({ account }) => ({ isLoggedIn: account.get('user').size > 0 && account.getIn(['user', 'emailVerified']), user: account.get('user'), loginStatus: account.get('status')})
 );
 
 export const getSelectedProviderProfile = state => {
