@@ -3,7 +3,6 @@ import { Tabs, Icon } from 'antd';
 
 import LoginPanel from './LoginPanel';
 import RegisterPanel from './RegisterPanel';
-import { StyledLayout, StyledContent } from './Styles';
 
 const TabPane = Tabs.TabPane;
 
@@ -17,8 +16,6 @@ const Login = ({
   googleLogin,
   logout
 }) => (
-  <StyledLayout>
-    <StyledContent>
       <Tabs defaultActiveKey="login">
         <TabPane
           tab={
@@ -51,8 +48,6 @@ const Login = ({
           />
         </TabPane>
       </Tabs>
-    </StyledContent>
-  </StyledLayout>
 );
 
 export default Login;

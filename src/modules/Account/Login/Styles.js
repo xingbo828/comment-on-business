@@ -1,22 +1,7 @@
 import style from 'styled-components'
-import { Layout, Icon } from 'antd';
-
-const { Content } = Layout;
+import { Icon } from 'antd';
 
 
-export const StyledLayout = style(Layout)`
-  height: 100vh;
-  padding-top: 200px;
-  background-image: url(https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg);
-  background-repeat: no-repeat;
-  background-position: center 110px;
-  background-size: 100%;
-`;
-
-export const StyledContent = style(Content)`
-  margin: 0 auto;
-  width: 368px;
-`;
 
 export const OtherServicesWrapper = style.div`
   line-height: 20px;
@@ -26,11 +11,12 @@ export const OtherServicesWrapper = style.div`
 
 
 export const StyledIcon = style(Icon)`
-  color: grey;
-  margin: 0 .45rem;
+  color: rgba(0,0,0,.2);
+  margin: 0 .5rem;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 25px;
   transition: .3s;
+
   &:hover {
     color: ${props=>props.color};
   }

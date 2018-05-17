@@ -5,11 +5,15 @@ import {
 } from 'antd';
 import { withRouter } from 'react-router-dom';
 
+import withLayout from '../../Common/withLayout';
+import OneColumnPreAuthLayout from '../../Common/Layout/OneColumnPreAuthLayout';
+
 import { auth as firebaseAuth } from '../../../firebaseClient';
 import ResetPassword from './ResetPassword';
 
 const enhance = compose(
   withRouter,
+  withLayout(OneColumnPreAuthLayout),
   withStateHandlers(
     ({ initialValue = false }) => ({
       isSubmitting: initialValue,

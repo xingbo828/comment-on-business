@@ -1,12 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { message } from 'antd';
+import { message, Spin } from 'antd';
 import { withRouter , Redirect } from 'react-router-dom';
-import { compose, withStateHandlers, withProps, branch, renderNothing, renderComponent, lifecycle } from 'recompose';
+import withLayout from '../../Common/withLayout';
+import OneColumnPreAuthLayout from '../../Common/Layout/OneColumnPreAuthLayout';
+import { compose, withStateHandlers, withProps, branch, renderComponent, lifecycle } from 'recompose';
 import * as firebase from 'firebase';
 import Login from './Login';
 import { auth as firebaseAuth } from '../../../firebaseClient';
 import { getAccount } from '../accountReducer';
+
+const Spinner = () => <Spin delay={500} size="large" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}} />
 
 const facebookLogin = () => {
   const provider = new firebase.auth.FacebookAuthProvider();
@@ -65,7 +69,7 @@ const enhance = compose(
   })),
   branch(
     props => props.account.get('status') === 'UNINIT',
-    renderNothing
+    renderComponent(Spinner)
   ),
   branch(
     props => props.account.get('status') === 'AUTHENTICATED' && props.account.getIn(['user', 'emailVerified']),
@@ -82,7 +86,8 @@ const enhance = compose(
         message.info('Thank you for registering with us. We have sent a account verification email to you.', 0);
       }
     }
-  })
+  }),
+  withLayout(OneColumnPreAuthLayout)
 );
 
 export default enhance(Login);

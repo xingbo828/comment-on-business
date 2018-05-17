@@ -29,7 +29,7 @@ const ProfileDropdown = ({ user, logout }) => {
       trigger={['click']}
     >
       <a style={{display: 'block'}} className="ant-dropdown-link" href="">
-        <Avatar size="large" src={user.photoURL} />
+        { user.photoURL ? <Avatar size="large" src={user.photoURL} /> : <Avatar size="large" icon="user" />}
       </a>
     </Dropdown>
   );
