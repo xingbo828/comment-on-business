@@ -27,7 +27,7 @@ export const OtherServicesWrapper = style.div`
 
 export const StyledIcon = style(Icon)`
   color: grey;
-  margin: 0 .35rem;
+  margin: 0 .45rem;
   cursor: pointer;
   font-size: 20px;
   transition: .3s;

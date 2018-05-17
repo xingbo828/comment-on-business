@@ -7,7 +7,16 @@ import { StyledLayout, StyledContent } from './Styles';
 
 const TabPane = Tabs.TabPane;
 
-const Login = ({ location, account, login, register, facebookLogin, googleLogin, logout }) => (
+const Login = ({
+  isSubmitting,
+  location,
+  account,
+  login,
+  register,
+  facebookLogin,
+  googleLogin,
+  logout
+}) => (
   <StyledLayout>
     <StyledContent>
       <Tabs defaultActiveKey="login">
@@ -19,7 +28,12 @@ const Login = ({ location, account, login, register, facebookLogin, googleLogin,
           }
           key="login"
         >
-          <LoginPanel onSubmit={login} facebookLogin={facebookLogin} googleLogin={googleLogin} />
+          <LoginPanel
+            isSubmitting={isSubmitting}
+            onSubmit={login}
+            facebookLogin={facebookLogin}
+            googleLogin={googleLogin}
+          />
         </TabPane>
         <TabPane
           tab={
@@ -31,6 +45,7 @@ const Login = ({ location, account, login, register, facebookLogin, googleLogin,
         >
           <RegisterPanel
             onSubmit={register}
+            isSubmitting={isSubmitting}
             facebookLogin={facebookLogin}
             googleLogin={googleLogin}
           />

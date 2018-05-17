@@ -1,11 +1,18 @@
 import React from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, Spin } from 'antd';
+import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
 import { StyledIcon, OtherServicesWrapper } from './Styles';
 
 const FormItem = Form.Item;
 
-const LoginPanel = ({ form, onSubmit, facebookLogin, googleLogin }) => {
+const LoginPanel = ({
+  isSubmitting,
+  form,
+  onSubmit,
+  facebookLogin,
+  googleLogin
+}) => {
   const { getFieldDecorator } = form;
 
   const handleSubmit = e => {
@@ -13,20 +20,26 @@ const LoginPanel = ({ form, onSubmit, facebookLogin, googleLogin }) => {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        onSubmit();
+        onSubmit(values);
       }
     });
   };
   return (
-    <React.Fragment>
+    <Spin spinning={isSubmitting}>
       <Form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <FormItem>
-          {getFieldDecorator('userName', {
-            rules: [{ required: true, message: 'Please input your username!' }]
+          {getFieldDecorator('email', {
+            rules: [
+              { required: true, message: 'Please input your email!' },
+              {
+                type: 'email',
+                message: 'The input is not valid E-mail!'
+              }
+            ]
           })(
             <Input
               prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
-              placeholder="Username"
+              placeholder="Email"
             />
           )}
         </FormItem>
@@ -51,9 +64,12 @@ const LoginPanel = ({ form, onSubmit, facebookLogin, googleLogin }) => {
           <Button type="primary" htmlType="submit">
             Log in
           </Button>
-          <a style={{ display: 'block', float: 'right' }} href="">
+          <Link
+            style={{ display: 'block', float: 'right' }}
+            to="/reset-password"
+          >
             Forgot password
-          </a>
+          </Link>
         </FormItem>
       </Form>
       <OtherServicesWrapper>
@@ -61,7 +77,7 @@ const LoginPanel = ({ form, onSubmit, facebookLogin, googleLogin }) => {
         <StyledIcon onClick={googleLogin} type="google" color="#d31b1c" />
         <StyledIcon onClick={facebookLogin} type="facebook" color="#3b5899" />
       </OtherServicesWrapper>
-    </React.Fragment>
+    </Spin>
   );
 };
 

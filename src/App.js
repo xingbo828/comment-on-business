@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import ProtectedRoute from './modules/Common/ProtectedRoute'
 import Login from './modules/Account/Login';
+import ResetPassword from './modules/Account/ResetPassword';
 import RegisterCompany from './modules/Account/CompanyProfile/Register';
 import EditCompanyProfile from './modules/Account/CompanyProfile/Edit';
 import Project from './modules/Project';
@@ -22,6 +23,7 @@ class App extends Component {
             <Redirect to="/projects" />
           </Route>
           <Route path="/login" component={Login} />
+          <Route path="/reset-password" component={ResetPassword} />
           <ProtectedRoute path="/register" component={RegisterCompany} />
           <ProtectedRoute path="/projects" component={Project} />
           {/* <ProtectedRoute path="/conversations" component={Conversation} /> */}

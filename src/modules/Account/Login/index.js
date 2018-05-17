@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { message } from 'antd';
 import { withRouter , Redirect } from 'react-router-dom';
-import { compose, withProps, branch, renderNothing, renderComponent, lifecycle } from 'recompose';
+import { compose, withStateHandlers, withProps, branch, renderNothing, renderComponent, lifecycle } from 'recompose';
 import * as firebase from 'firebase';
 import Login from './Login';
 import { auth as firebaseAuth } from '../../../firebaseClient';
@@ -22,27 +22,46 @@ const googleLogin = () => {
   firebaseAuth.signInWithRedirect(provider);
 };
 
-const register = async ({ email, password}) => {
- const user = await firebase.auth().createUserWithEmailAndPassword(email, password);
- await user.sendEmailVerification()
-};
-
-const login = () => {
-
-};
-
 const mapStateToProps = state => getAccount(state);
-
 
 const enhance = compose(
   withRouter,
   connect(mapStateToProps),
+  withStateHandlers(
+    ({ initialValue = false }) => ({
+      isSubmitting: initialValue,
+    }),
+    {
+      updateIsSubmitting: ({ isSubmitting }) => (value) => ({
+        isSubmitting: value
+      })
+    }
+  ),
   withProps(props => ({
     authButNotEmailVerified: props.account.get('status') === 'AUTHENTICATED' && !props.account.getIn(['user', 'emailVerified']),
     facebookLogin,
     googleLogin,
-    register,
-    login
+    register: async ({ email, password }) => {
+      props.updateIsSubmitting(true);
+      try {
+        const user = await firebaseAuth.createUserWithEmailAndPassword(email, password);
+        await user.sendEmailVerification();
+      } catch(error) {
+        console.error(error)
+        message.error(error.message, 10);
+      }
+      props.updateIsSubmitting(false)
+    },
+    login: async ({ email, password }) => {
+      props.updateIsSubmitting(true);
+      try {
+        await firebaseAuth.signInWithEmailAndPassword(email, password);
+      } catch(error) {
+        console.error(error)
+        message.error(error.message, 10);
+      }
+      props.updateIsSubmitting(false)
+    }
   })),
   branch(
     props => props.account.get('status') === 'UNINIT',

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, Spin } from 'antd';
 import { compose } from 'recompose';
 import { StyledIcon, OtherServicesWrapper } from './Styles';
 const FormItem = Form.Item;
@@ -43,12 +43,13 @@ class RegisterPanel extends Component {
 
   render() {
     const {
+      isSubmitting,
       form: { getFieldDecorator },
       facebookLogin,
       googleLogin
     } = this.props;
     return (
-      <React.Fragment>
+      <Spin spinning={isSubmitting}>
         <Form onSubmit={this.handleSubmit} className="login-form">
           <FormItem label="E-mail">
             {getFieldDecorator('email', {
@@ -132,7 +133,7 @@ class RegisterPanel extends Component {
           <StyledIcon onClick={googleLogin} type="google" color="#d31b1c" />
           <StyledIcon onClick={facebookLogin} type="facebook" color="#3b5899" />
         </OtherServicesWrapper>
-      </React.Fragment>
+      </Spin>
     );
   }
 }
