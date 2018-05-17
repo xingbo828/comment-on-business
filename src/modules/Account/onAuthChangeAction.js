@@ -19,6 +19,8 @@ export const onAuthChange = () => dispatch => {
           })
           const providers = await Promise.all(providersPromises);
           additionalUserData.providers = providers;
+        } else {
+          additionalUserData.providers = [];
         }
         dispatch({
           type: USER_LOGIN,
