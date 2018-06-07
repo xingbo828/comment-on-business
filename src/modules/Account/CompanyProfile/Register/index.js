@@ -33,7 +33,6 @@ const enhance = compose(
   withProps(props => ({
     isRegistering: true,
     submitForm: async (providerInfo) => {
-      console.log(props)
       props.updateIsSubmitting(true)
       await props.createProvider(providerInfo);
       props.updateIsSubmitting(false)

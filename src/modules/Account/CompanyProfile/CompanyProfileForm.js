@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Upload, Button, Icon, Spin, Tabs, AutoComplete } from 'antd';
+import { Form, Input, Switch, Upload, Button, Icon, Spin, Tabs, AutoComplete } from 'antd';
 import isString from 'lodash/isString';
 import isArray from 'lodash/isArray';
 import has from 'lodash/has';
@@ -219,6 +219,10 @@ class CompanyProfile extends Component {
                     }
                   ]
                 })(<Input />)}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label="Receive email notifications">
+                {getFieldDecorator('receiveEmail', { initialValue: true, valuePropName: 'checked' })(<Switch checkedChildren="Yes" unCheckedChildren="No" />)}
               </FormItem>
 
               <FormItem {...formItemLayout} label="Website" hasFeedback>
