@@ -1,9 +1,21 @@
 import React from 'react';
-import { Card, Row, Col, Icon } from 'antd';
+import { Card, Row, Col, Icon, Badge } from 'antd';
 import get from 'lodash/get';
+import isNil from 'lodash/isNil';
+import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
 
 const ConfigurationDetail = ({ project: { status, projectDetail } }) => {
+
+  const renderItems = (items) => {
+    if(isNil(items) || isEmpty(items)) {
+      return 'N/A';
+    }
+    console.log(items)
+    return Object.keys(items).map(key => (<div>{key} <Badge style={{ backgroundColor: '#1890ff' }} count={<span>x {items[key]}</span>} /></div>));
+   }
+
+
   return (
     <React.Fragment>
       <Card
@@ -25,7 +37,7 @@ const ConfigurationDetail = ({ project: { status, projectDetail } }) => {
             <strong>Notes:</strong>
           </Col>
           <Col xs={{ span: 16 }} md={{ span: 18 }}>
-            {get(projectDetail, 'configuration.additionalNotes')}
+            {get(projectDetail, 'configuration.additionalNotes') || 'N/A'}
           </Col>
         </Row>
       </Card>
@@ -92,6 +104,45 @@ const ConfigurationDetail = ({ project: { status, projectDetail } }) => {
           </Col>
         </Row>
       </Card>
+      <Card
+        loading={status === 'PENDING'}
+        title="Items information"
+        bordered={true}
+        style={{ marginTop: 20 }}
+      >
+      <Row style={{ marginBottom: 12 }}>
+          <Col xs={{ span: 8 }} md={{ span: 6 }}>
+            <strong>Special care:</strong>
+          </Col>
+          <Col xs={{ span: 16 }} md={{ span: 18 }}>
+            {renderItems(get(projectDetail, 'configuration.items.specialCare'))}
+          </Col>
+        </Row>
+        <Row style={{ marginBottom: 12 }}>
+          <Col xs={{ span: 8 }} md={{ span: 6 }}>
+            <strong>Appliances:</strong>
+          </Col>
+          <Col xs={{ span: 16 }} md={{ span: 18 }}>
+            {renderItems(get(projectDetail, 'configuration.items.appliances'))}
+          </Col>
+        </Row>
+        <Row style={{ marginBottom: 12 }}>
+          <Col xs={{ span: 8 }} md={{ span: 6 }}>
+            <strong>Decore:</strong>
+          </Col>
+          <Col xs={{ span: 16 }} md={{ span: 18 }}>
+            {renderItems(get(projectDetail, 'configuration.items.decore'))}
+          </Col>
+        </Row>
+        <Row style={{ marginBottom: 12 }}>
+          <Col xs={{ span: 8 }} md={{ span: 6 }}>
+            <strong>Additional items information:</strong>
+          </Col>
+          <Col xs={{ span: 16 }} md={{ span: 18 }}>
+            {get(projectDetail, 'configuration.items.otherItems') || 'N/A'}
+          </Col>
+        </Row>
+    </Card>
     </React.Fragment>
   );
 };

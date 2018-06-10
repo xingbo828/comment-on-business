@@ -50,6 +50,7 @@ const enhance = compose(
         paymentMethods: Form.createFormField({ value: selectedProviderProfile.paymentMethods || {} }),
         reviewInfo: Form.createFormField({ value: selectedProviderProfile.reviewInfo || {} }),
         receiveEmail: Form.createFormField({ value: selectedProviderProfile.receiveEmail }),
+        coverPhotos: Form.createFormField({ value: selectedProviderProfile.coverPhotos }),
       };
     }
   })

@@ -42,12 +42,32 @@ const _updateUserProviders = async providerRef => {
   return providers;
 };
 
+const _uploadCoverPhoto = async (coverPhoto, providerId) => {
+  const imgStorageRef = storage.ref();
+  if(coverPhoto.url) {
+    return coverPhoto.url;
+  }
+
+  const coverPhotoName = _randomFileName(coverPhoto.name);
+  const imgRef = imgStorageRef.child(`images/provider/${providerId}/${coverPhotoName}`);
+  const result = await imgRef.put(coverPhoto.originFileObj);
+  return result.downloadURL;
+
+};
+
+const _mapCoverPhotosToUrls = async (coverPhotos, providerId) => {
+  const promises = coverPhotos.map(c => _uploadCoverPhoto(c, providerId));
+  return Promise.all(promises);
+};
+
 
 const _updateProviderProfile = async (providerId, providerInfo, dispatch) => {
   const logo = await _uploadLogo(providerInfo.logo, providerId); 
-  const updatedProviderInfo = isUndefined(logo) ? omit(providerInfo, ['logo']) : Object.assign(providerInfo, {
+  let updatedProviderInfo = isUndefined(logo) ? omit(providerInfo, ['logo']) : Object.assign(providerInfo, {
     logo
   });
+  const coverPhotos = await _mapCoverPhotosToUrls(providerInfo.coverPhotos, providerId);
+  updatedProviderInfo = Object.assign(updatedProviderInfo, { coverPhotos });
   const providerDocRef = providerCollectionRef.doc(providerId);
   const updatedProviderInfoWithoutUndefined = omitBy(updatedProviderInfo, isUndefined);
   providerDocRef.update(updatedProviderInfoWithoutUndefined);

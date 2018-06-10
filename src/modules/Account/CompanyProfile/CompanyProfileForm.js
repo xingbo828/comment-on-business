@@ -6,6 +6,7 @@ import has from 'lodash/has';
 import RichEditor from './components/RichEditor';
 import PaymentMethods from './components/PaymentMethods';
 import ReviewInfo from './components/ReviewInfo';
+import CoverPhotos from './components/CoverPhotos';
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -297,6 +298,29 @@ class CompanyProfile extends Component {
                 <FormItem {...metaFormItemLayout}>
                   {getFieldDecorator('reviewInfo')(
                     <ReviewInfo />
+                  )}
+                </FormItem>
+                <FormItem {...metaTailFormItemLayout}>
+                  <Button
+                    size="large"
+                    icon="save"
+                    type="primary"
+                    htmlType="submit"
+                  >
+                    Save
+                  </Button>
+                </FormItem>
+              </TabPane>
+            )}
+            {!isRegistering && (
+              <TabPane
+                tab="Cover photos"
+                key="coverPhotos"
+                style={{ paddingTop: 20 }}
+              >
+                <FormItem {...metaFormItemLayout}>
+                  {getFieldDecorator('coverPhotos')(
+                    <CoverPhotos />
                   )}
                 </FormItem>
                 <FormItem {...metaTailFormItemLayout}>
