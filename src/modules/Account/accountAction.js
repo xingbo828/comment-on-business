@@ -66,7 +66,7 @@ const _updateProviderProfile = async (providerId, providerInfo, dispatch) => {
   let updatedProviderInfo = isUndefined(logo) ? omit(providerInfo, ['logo']) : Object.assign(providerInfo, {
     logo
   });
-  const coverPhotos = await _mapCoverPhotosToUrls(providerInfo.coverPhotos, providerId);
+  const coverPhotos = await _mapCoverPhotosToUrls(providerInfo.coverPhotos || [], providerId);
   updatedProviderInfo = Object.assign(updatedProviderInfo, { coverPhotos });
   const providerDocRef = providerCollectionRef.doc(providerId);
   const updatedProviderInfoWithoutUndefined = omitBy(updatedProviderInfo, isUndefined);
