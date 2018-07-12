@@ -1,149 +1,158 @@
 import React from 'react';
-import { Card, Row, Col, Icon, Badge } from 'antd';
+import { Card, Row, Col, Icon, Tag } from 'antd';
+import styled from 'styled-components';
 import get from 'lodash/get';
 import isNil from 'lodash/isNil';
 import isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
+import AddressMap from './AddressMap';
 
-const ConfigurationDetail = ({ project: { status, projectDetail } }) => {
+const InnerCardItem = styled.span`
+  display: flex;
+  padding: .5rem 0;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`;
+
+
+const ConfigurationDetail = ({ projectType, project: { status, projectDetail } }) => {
 
   const renderItems = (items) => {
     if(isNil(items) || isEmpty(items)) {
       return 'N/A';
     }
-    console.log(items)
-    return Object.keys(items).map(key => (<div>{key} <Badge style={{ backgroundColor: '#1890ff' }} count={<span>x {items[key]}</span>} /></div>));
+    return Object.keys(items).map(key => (<div key={key}>{key} <Tag color="blue">x {items[key]}</Tag></div>));
    }
 
 
   return (
-    <React.Fragment>
-      <Card
-        loading={status === 'PENDING'}
-        title="Customer basic information"
-        bordered={true}
-        style={{ marginTop: 20 }}
-      >
-        <Row style={{ marginBottom: 12 }}>
-          <Col xs={{ span: 8 }} md={{ span: 6 }}>
-            <strong>Name:</strong>
-          </Col>
-          <Col xs={{ span: 16 }} md={{ span: 18 }}>
-            {get(projectDetail, 'owner.displayName')}
-          </Col>
-        </Row>
-        <Row style={{ marginBottom: 12 }}>
-          <Col xs={{ span: 8 }} md={{ span: 6 }}>
-            <strong>Notes:</strong>
-          </Col>
-          <Col xs={{ span: 16 }} md={{ span: 18 }}>
-            {get(projectDetail, 'configuration.additionalNotes') || 'N/A'}
-          </Col>
-        </Row>
-      </Card>
-      <Card
-        loading={status === 'PENDING'}
-        title="Customer address information"
-        bordered={true}
-        style={{ marginTop: 20 }}
-      >
-        <Row style={{ marginBottom: 12 }}>
-          <Col xs={{ span: 8 }} md={{ span: 6 }}>
-            <strong>Pick-up address:</strong>
-          </Col>
-          <Col xs={{ span: 16 }} md={{ span: 18 }}>
-          <Icon type="home" /> {get(
-              projectDetail,
-              'configuration.addresses.formattedPickUpAddress'
-            )}
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={{ span: 8 }} md={{ span: 6 }}>
-            <strong>Delivery address:</strong>
-          </Col>
-          <Col xs={{ span: 16 }} md={{ span: 18 }}>
-          <Icon type="environment-o" /> {get(
-              projectDetail,
-              'configuration.addresses.formattedDeliveryAddress'
-            )}
-          </Col>
-        </Row>
-      </Card>
-      <Card
-        style={{ marginTop: 20 }}
-        loading={status === 'PENDING'}
-        title="Customer preferred moving dates"
-        bordered={true}
-      >
-        <Row>
-          {get(projectDetail, 'configuration.date.pickUpDate', []).map(d => (
-            <Col
-              key={d}
-              xs={{ span: 10 }}
-              md={{ span: 8 }}
-              style={{ marginBottom: 12 }}
+    <div style={{ background: 'rgb(240, 242, 245)', padding: '1rem' }}>
+
+          <Row>
+        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+          {status==='LOADED' && <AddressMap google={window.google} pickUpAddress={get(
+                projectDetail,
+                'configuration.addresses.pickUpAddress'
+              )} deliveryAddress={get(
+                projectDetail,
+                'configuration.addresses.deliveryAddress'
+              )}/>}
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+          <Card
+            loading={status === 'PENDING'}
+            title="Address"
+            bordered={true}
+            style={{marginBottom: '.75rem'}}
+          >
+            <InnerCardItem>
+              <strong>Pick-up address:</strong>
+              <span><Icon type="home" /> {get(
+                projectDetail,
+                'configuration.addresses.formattedPickUpAddress'
+              )}</span>
+            </InnerCardItem>
+            <InnerCardItem>
+              <strong>Delivery address:</strong>
+              <span><Icon type="environment-o" /> {get(
+                projectDetail,
+                'configuration.addresses.formattedDeliveryAddress'
+              )}</span>
+            </InnerCardItem>
+          </Card>
+        </Col>
+      </Row>
+
+
+      <Row gutter={16}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+          <Card
+            loading={status === 'PENDING'}
+            title="Contact"
+            bordered={true}
+            style={{marginBottom: '.75rem'}}
+          >
+            <InnerCardItem>
+              <strong>Name:</strong>
+              {get(projectDetail, 'owner.displayName')}
+            </InnerCardItem>
+            {projectType === 'DIRECT' && 
+            <InnerCardItem>
+              <strong>Phone number:</strong>
+              {get(projectDetail, 'configuration.contactInfo.phoneNumber')}
+            </InnerCardItem>}
+            {projectType === 'DIRECT' && 
+            <InnerCardItem>
+              <strong>Email:</strong>
+              {get(projectDetail, 'configuration.contactInfo.email')}
+            </InnerCardItem>}
+            <InnerCardItem>
+              <strong>Notes:</strong>
+              {get(projectDetail, 'configuration.additionalNotes') || 'N/A'}
+            </InnerCardItem>
+          </Card>
+        </Col>
+
+        <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+          <Card
+              loading={status === 'PENDING'}
+              title="Dates"
+              bordered={true}
+              style={{marginBottom: '.75rem'}}
             >
-              <Icon type="calendar" /> {moment(d).format('dddd, MMMM, D, YYYY')}
-            </Col>
-          ))}
-        </Row>
-      </Card>
-      <Card
-        style={{ marginTop: 20 }}
-        loading={status === 'PENDING'}
-        title="Customer logistics information"
-        bordered={true}
-      >
-        <Row>
-          <Col xs={{ span: 8 }} md={{ span: 6 }}>
+              <InnerCardItem>
+                {get(projectDetail, 'configuration.date.pickUpDate', []).map(d => (
+                    <span key={d} style={{minWidth: '220px', marginBottom: '.25rem'}}><Icon type="calendar" /> {moment(d).format('dddd, MMMM, D, YYYY')}</span>
+                ))}
+              </InnerCardItem>
+            </Card>
+
+        </Col>
+      </Row>
+
+
+
+      <Row gutter={16}>
+        <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+          <Card
+            loading={status === 'PENDING'}
+            title="Logistics"
+            bordered={true}
+            style={{marginBottom: '.75rem'}}
+          >
+           <InnerCardItem>
             <strong>Residence type:</strong>
-          </Col>
-          <Col xs={{ span: 16 }} md={{ span: 18 }}>
             {get(projectDetail, 'configuration.logistics.residenceType')}
-          </Col>
-        </Row>
-      </Card>
-      <Card
-        loading={status === 'PENDING'}
-        title="Items information"
-        bordered={true}
-        style={{ marginTop: 20 }}
-      >
-      <Row style={{ marginBottom: 12 }}>
-          <Col xs={{ span: 8 }} md={{ span: 6 }}>
-            <strong>Special care:</strong>
-          </Col>
-          <Col xs={{ span: 16 }} md={{ span: 18 }}>
-            {renderItems(get(projectDetail, 'configuration.items.specialCare'))}
-          </Col>
-        </Row>
-        <Row style={{ marginBottom: 12 }}>
-          <Col xs={{ span: 8 }} md={{ span: 6 }}>
+            </InnerCardItem>
+          </Card>
+        </Col>
+        <Col xs={24} sm={24} md={24} lg={24} xl={12}>
+        <Card
+            loading={status === 'PENDING'}
+            title="Items"
+            bordered={true}
+            style={{marginBottom: '.75rem'}}
+          >
+           <InnerCardItem>
+              <strong>Special care:</strong>
+              <span>{renderItems(get(projectDetail, 'configuration.items.specialCare'))}</span>
+            </InnerCardItem>
+            <InnerCardItem>
             <strong>Appliances:</strong>
-          </Col>
-          <Col xs={{ span: 16 }} md={{ span: 18 }}>
-            {renderItems(get(projectDetail, 'configuration.items.appliances'))}
-          </Col>
-        </Row>
-        <Row style={{ marginBottom: 12 }}>
-          <Col xs={{ span: 8 }} md={{ span: 6 }}>
-            <strong>Decore:</strong>
-          </Col>
-          <Col xs={{ span: 16 }} md={{ span: 18 }}>
-            {renderItems(get(projectDetail, 'configuration.items.decore'))}
-          </Col>
-        </Row>
-        <Row style={{ marginBottom: 12 }}>
-          <Col xs={{ span: 8 }} md={{ span: 6 }}>
-            <strong>Additional items information:</strong>
-          </Col>
-          <Col xs={{ span: 16 }} md={{ span: 18 }}>
-            {get(projectDetail, 'configuration.items.otherItems') || 'N/A'}
-          </Col>
-        </Row>
-    </Card>
-    </React.Fragment>
+              <span> {renderItems(get(projectDetail, 'configuration.items.appliances'))}</span>
+            </InnerCardItem>
+            <InnerCardItem>
+              <strong>Decore:</strong>
+              <span>{renderItems(get(projectDetail, 'configuration.items.decore'))}</span>
+            </InnerCardItem>
+            <InnerCardItem>
+              <strong>Additional items information:</strong>
+              {get(projectDetail, 'configuration.items.otherItems') || 'N/A'}
+            </InnerCardItem>
+          </Card>
+        </Col>
+      </Row>
+    </div>
   );
 };
 

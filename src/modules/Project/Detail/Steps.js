@@ -66,6 +66,7 @@ const ProjectSteps = ({ project }) => {
 };
 
 const enhance = compose(
+  branch(props => props.projectType === 'DIRECT', renderNothing),
   branch(props => props.project.status !== 'LOADED', renderNothing)
 );
 

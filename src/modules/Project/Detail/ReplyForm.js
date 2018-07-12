@@ -80,6 +80,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const enhance = compose(
+  branch(props => props.projectType === 'DIRECT', renderNothing),
   connect(null, mapDispatchToProps),
   branch(props => props.project.status !== 'LOADED', renderNothing),
   branch(({ project: { projectDetail }}) => !(projectDetail.status === 'created' && projectDetail.receiver.status === 'sent'), renderNothing),

@@ -23,6 +23,7 @@ export const getProjects = (providerId) => async dispatch => {
   } else {
     result = projects.map(project => {
       return {
+        type: project.type,
          customerName: project.owner.displayName,
          creationDate: moment(project.creationTimestamp),
          id: project.id,

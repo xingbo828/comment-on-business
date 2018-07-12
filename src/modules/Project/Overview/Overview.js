@@ -1,119 +1,162 @@
 import React from 'react';
-import { Table, Badge, Tabs } from 'antd';
+import { 
+  Table,
+  //  Badge, 
+  // Tabs
+  } from 'antd';
 import { Link } from 'react-router-dom';
 import { H1 } from '../../Common/Components/Heading';
 
-const TabPane = Tabs.TabPane;
+// const TabPane = Tabs.TabPane;
 
 const ProjectOverview = ({ projectsOverview: { projects, status } }) => {
-  const renderStatus = status => {
-    if (status === 'sent') {
-      return <Badge status="warning" text="Waiting for input" />;
-    } else if (status === 'accept') {
-      return <Badge status="processing" text="Waiting for customer response" />;
-    } else if (status === 'confirmed') {
-      return <Badge status="success" text="Contact customer" />;
+  // const renderStatus = status => {
+  //   if (status === 'sent') {
+  //     return <Badge status="warning" text="Waiting for input" />;
+  //   } else if (status === 'accept') {
+  //     return <Badge status="processing" text="Waiting for customer response" />;
+  //   } else if (status === 'confirmed') {
+  //     return <Badge status="success" text="Contact customer" />;
+  //   }
+  //   return null;
+  // };
+
+  const myProjectsColumns = [
+    {
+      title: 'Customer',
+      dataIndex: 'customerName',
+      sorter: (a, b) => a.customerName > b.customerName
+    },
+    {
+      title: 'ID',
+      dataIndex: 'id'
+    },
+    {
+      title: 'Creation date',
+      dataIndex: 'creationDate',
+      render: (text) => text.format('MMMM, DD, YYYY'),
+      sorter: (a, b) => {
+        return a.creationDate > b.creationDate
+      }
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (text, project) => (
+        <Link to={{
+          pathname: `/projects/${project.id}`,
+          state: { projectType: project.type }
+        }}>View detail</Link>
+      )
     }
-    return null;
-  };
-  const activeProjectsColumns = [
-    {
-      title: 'Customer',
-      dataIndex: 'customerName',
-      sorter: (a, b) => a.customerName > b.customerName
-    },
-    {
-      title: 'ID',
-      dataIndex: 'id'
-    },
-    {
-      title: 'Status',
-      dataIndex: 'providerStatus',
-      filters: [
-        {
-          text: 'Waiting for input',
-          value: 'sent'
-        },
-        {
-          text: 'Waiting for response',
-          value: 'accept'
-        },
-        {
-          text: 'Customer confirmed',
-          value: 'confirmed'
-        }
-      ],
-      filterMultiple: false,
-      onFilter: (value, record) => {
-        return record.providerStatus === value;
-      },
-      render: (text, project) => renderStatus(text)
-    },
-    {
-      title: 'Creation date',
-      dataIndex: 'creationDate',
-      render: (text) => text.format('MMMM, DD, YYYY'),
-      sorter: (a, b) => {
-        return a.creationDate > b.creationDate
-      }
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text, project) => (
-        <Link to={`/projects/${project.id}`}>View detail</Link>
-      )
-    },
   ];
 
-  const renderArchivedStatus = (project) => {
-    if (project.providerStatus === 'reject') {
-      return <Badge status="error" text="Reject by you" />;
-    } else if (project.projectStatus === 'rejected') {
-      return <Badge status="default" text="Project is closed" />;
-    } 
-    return null;
-  }
+  // const activeProjectsColumns = [
+  //   {
+  //     title: 'Customer',
+  //     dataIndex: 'customerName',
+  //     sorter: (a, b) => a.customerName > b.customerName
+  //   },
+  //   {
+  //     title: 'ID',
+  //     dataIndex: 'id'
+  //   },
+  //   {
+  //     title: 'Status',
+  //     dataIndex: 'providerStatus',
+  //     filters: [
+  //       {
+  //         text: 'Waiting for input',
+  //         value: 'sent'
+  //       },
+  //       {
+  //         text: 'Waiting for response',
+  //         value: 'accept'
+  //       },
+  //       {
+  //         text: 'Customer confirmed',
+  //         value: 'confirmed'
+  //       }
+  //     ],
+  //     filterMultiple: false,
+  //     onFilter: (value, record) => {
+  //       return record.providerStatus === value;
+  //     },
+  //     render: (text, project) => renderStatus(text)
+  //   },
+  //   {
+  //     title: 'Creation date',
+  //     dataIndex: 'creationDate',
+  //     render: (text) => text.format('MMMM, DD, YYYY'),
+  //     sorter: (a, b) => {
+  //       return a.creationDate > b.creationDate
+  //     }
+  //   },
+  //   {
+  //     title: 'Action',
+  //     key: 'action',
+  //     render: (text, project) => (
+  //       <Link to={`/projects/${project.id}`}>View detail</Link>
+  //     )
+  //   }
+  // ];
 
-  const archivedProjectsColumns = [
-    {
-      title: 'Customer',
-      dataIndex: 'customerName',
-      sorter: (a, b) => a.customerName > b.customerName
-    },
-    {
-      title: 'ID',
-      dataIndex: 'id'
-    },
-    {
-      title: 'Status',
-      dataIndex: 'providerStatus',
-      render: (text, project) => renderArchivedStatus(project)
-    },
-    {
-      title: 'Creation date',
-      dataIndex: 'creationDate',
-      render: (text) => text.format('MMMM, DD, YYYY'),
-      sorter: (a, b) => {
-        return a.creationDate > b.creationDate
-      }
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text, project) => (
-        <Link to={`/projects/${project.id}`}>View detail</Link>
-      )
-    },
-  ];
+  // const renderArchivedStatus = (project) => {
+  //   if (project.providerStatus === 'reject') {
+  //     return <Badge status="error" text="Reject by you" />;
+  //   } else if (project.projectStatus === 'rejected') {
+  //     return <Badge status="default" text="Project is closed" />;
+  //   } 
+  //   return null;
+  // }
+
+  // const archivedProjectsColumns = [
+  //   {
+  //     title: 'Customer',
+  //     dataIndex: 'customerName',
+  //     sorter: (a, b) => a.customerName > b.customerName
+  //   },
+  //   {
+  //     title: 'ID',
+  //     dataIndex: 'id'
+  //   },
+  //   {
+  //     title: 'Status',
+  //     dataIndex: 'providerStatus',
+  //     render: (text, project) => renderArchivedStatus(project)
+  //   },
+  //   {
+  //     title: 'Creation date',
+  //     dataIndex: 'creationDate',
+  //     render: (text) => text.format('MMMM, DD, YYYY'),
+  //     sorter: (a, b) => {
+  //       return a.creationDate > b.creationDate
+  //     }
+  //   },
+  //   {
+  //     title: 'Action',
+  //     key: 'action',
+  //     render: (text, project) => (
+  //       <Link to={`/projects/${project.id}`}>View detail</Link>
+  //     )
+  //   },
+  // ];
 
 
-  const activeProjects = projects.filter(p => p.providerStatus!=='reject' && p.projectStatus !== 'rejected');
-  const archivedProjects = projects.filter(p => p.providerStatus==='reject' || p.projectStatus === 'rejected');
+  // const activeProjects = projects.filter(p => p.providerStatus!=='reject' && p.projectStatus !== 'rejected');
+  // const archivedProjects = projects.filter(p => p.providerStatus==='reject' || p.projectStatus === 'rejected');
+  const myProjects = projects.filter(p => p.type === 'DIRECT');
   return (
     <div>
-      <H1>Project Overview</H1>
-      <Tabs defaultActiveKey="active">
+      <H1>My Projects</H1>
+      <Table
+            loading={status === 'PENDING'}
+            pagination={{ pageSize: 10 }}
+            rowKey={record => record.id}
+            dataSource={myProjects}
+            columns={myProjectsColumns}
+          />
+      {/* <Tabs defaultActiveKey="active">
         <TabPane tab="Active projects" key="active">
           <Table
             loading={status === 'PENDING'}
@@ -132,7 +175,7 @@ const ProjectOverview = ({ projectsOverview: { projects, status } }) => {
             pagination={{ pageSize: 10 }}
           />
         </TabPane>
-      </Tabs>
+      </Tabs> */}
 
     </div>
   );

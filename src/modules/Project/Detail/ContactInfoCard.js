@@ -35,6 +35,7 @@ const ContactInfoCard = ({ project: { projectDetail } }) => {
 };
 
 const enhance = compose(
+  branch(props => props.projectType === 'DIRECT', renderNothing),
   branch(props => props.project.status !== 'LOADED', renderNothing),
   branch(
     props => props.project.projectDetail.receiver.status !== 'confirmed',
