@@ -43,9 +43,14 @@ const _updateUserProviders = async providerRef => {
 };
 
 const _uploadCoverPhoto = async (coverPhoto, providerId) => {
+
   const imgStorageRef = storage.ref();
   if(coverPhoto.url) {
     return coverPhoto.url;
+  }
+
+  if (isUndefined(coverPhoto) || typeof coverPhoto === 'string') {
+    return coverPhoto;
   }
 
   const coverPhotoName = _randomFileName(coverPhoto.name);
