@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Upload, Icon, Modal } from 'antd';
 
-class CoverPhotos extends Component {
+class PhotoGallery extends Component {
 
   state = {
     previewVisible: false,
@@ -60,4 +60,4 @@ class CoverPhotos extends Component {
   }
 }
 
-export default CoverPhotos;
+export default PhotoGallery;

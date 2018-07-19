@@ -33,9 +33,14 @@ const enhance = compose(
     isRegistering: false,
     submitForm: async (providerInfo) => {
       props.updateIsSubmitting(true)
-      await props.editProvider(props.selectedProviderProfile.id, providerInfo);
+      try {
+        await props.editProvider(props.selectedProviderProfile.id, providerInfo);
+        message.success('Company profile updated');
+      } catch(error) {
+        message.error(error);
+      }
       props.updateIsSubmitting(false)
-      message.success('Company profile updated');
+      
     }
   })),
   Form.create({
@@ -47,10 +52,11 @@ const enhance = compose(
         website: Form.createFormField({ value: selectedProviderProfile.website }),
         description: Form.createFormField({ value: selectedProviderProfile.description }),
         logo: Form.createFormField({ value: selectedProviderProfile.logo }),
+        coverPhoto: Form.createFormField({ value: selectedProviderProfile.coverPhoto }),
         paymentMethods: Form.createFormField({ value: selectedProviderProfile.paymentMethods || {} }),
         reviewInfo: Form.createFormField({ value: selectedProviderProfile.reviewInfo || {} }),
         receiveEmail: Form.createFormField({ value: selectedProviderProfile.receiveEmail }),
-        coverPhotos: Form.createFormField({ value: selectedProviderProfile.coverPhotos }),
+        photoGallery: Form.createFormField({ value: selectedProviderProfile.photoGallery }),
       };
     }
   })

@@ -18,16 +18,19 @@ const _randomFileName = (originalName) => {
   return `${originalNameWithoutExt}_${Math.floor(Date.now() / 1000)}${ext}`;
 };
 
-const _uploadLogo = async (logo, providerId) => {
+const _uploadPhoto = async (photo, providerId) => {
   const imgStorageRef = storage.ref();
-  if (isUndefined(logo) || typeof logo === 'string') {
-    return logo;
+  if (isUndefined(photo) || typeof photo === 'string') {
+    return photo;
   }
-  const imageName = _randomFileName(logo.name);
+  const imageName = _randomFileName(photo.name);
   const imgRef = imgStorageRef.child(`images/provider/${providerId}/${imageName}`);
-  const result = await imgRef.put(logo);
-  return  result.downloadURL;
-  // return result.downloadURL.replace(imageName, `thumb_${imageName}`);
+  if(photo.originFileObj) {
+    const result = await imgRef.put(photo.originFileObj);
+    return result.downloadURL;
+  }
+  const result = await imgRef.put(photo);
+  return result.downloadURL;
 };
 
 const _updateUserProviders = async providerRef => {
@@ -42,37 +45,24 @@ const _updateUserProviders = async providerRef => {
   return providers;
 };
 
-const _uploadCoverPhoto = async (coverPhoto, providerId) => {
 
-  const imgStorageRef = storage.ref();
-  if(coverPhoto.url) {
-    return coverPhoto.url;
-  }
-
-  if (isUndefined(coverPhoto) || typeof coverPhoto === 'string') {
-    return coverPhoto;
-  }
-
-  const coverPhotoName = _randomFileName(coverPhoto.name);
-  const imgRef = imgStorageRef.child(`images/provider/${providerId}/${coverPhotoName}`);
-  const result = await imgRef.put(coverPhoto.originFileObj);
-  return result.downloadURL;
-
-};
-
-const _mapCoverPhotosToUrls = async (coverPhotos, providerId) => {
-  const promises = coverPhotos.map(c => _uploadCoverPhoto(c, providerId));
+const _mapPhotoGalleryToUrls = async (photoGallery, providerId) => {
+  const promises = photoGallery.map(c => _uploadPhoto(c, providerId));
   return Promise.all(promises);
 };
 
-
 const _updateProviderProfile = async (providerId, providerInfo, dispatch) => {
-  const logo = await _uploadLogo(providerInfo.logo, providerId); 
+  const logo = await _uploadPhoto(providerInfo.logo, providerId); 
+  
+  const coverPhoto = await _uploadPhoto(providerInfo.coverPhoto, providerId);
   let updatedProviderInfo = isUndefined(logo) ? omit(providerInfo, ['logo']) : Object.assign(providerInfo, {
     logo
   });
-  const coverPhotos = await _mapCoverPhotosToUrls(providerInfo.coverPhotos || [], providerId);
-  updatedProviderInfo = Object.assign(updatedProviderInfo, { coverPhotos });
+  updatedProviderInfo = isUndefined(coverPhoto) ? omit(providerInfo, ['coverPhoto']) : Object.assign(providerInfo, {
+    coverPhoto
+  });
+  const photoGallery = await _mapPhotoGalleryToUrls(providerInfo.photoGallery || [], providerId);
+  updatedProviderInfo = Object.assign(updatedProviderInfo, { photoGallery });
   const providerDocRef = providerCollectionRef.doc(providerId);
   const updatedProviderInfoWithoutUndefined = omitBy(updatedProviderInfo, isUndefined);
   providerDocRef.update(updatedProviderInfoWithoutUndefined);

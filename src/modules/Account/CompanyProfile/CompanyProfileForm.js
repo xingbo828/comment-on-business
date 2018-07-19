@@ -6,7 +6,7 @@ import has from 'lodash/has';
 import RichEditor from './components/RichEditor';
 import PaymentMethods from './components/PaymentMethods';
 import ReviewInfo from './components/ReviewInfo';
-import CoverPhotos from './components/CoverPhotos';
+import PhotoGallery from './components/PhotoGallery';
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -15,8 +15,22 @@ const AutoCompleteOption = AutoComplete.Option;
 class CompanyProfile extends Component {
   state = {
     logoSelected: false,
-    autoCompleteResult: []
+    coverPhotoSelected: false,
+    autoCompleteResult: [],
+    activeTab: null
   };
+
+  componentDidMount() {
+    if (this.props.isRegistering || !has(this.props.location, 'state.tab')) {
+      this.setState({
+        activeTab: 'basic'
+      });
+    } else {
+      this.setState({
+        activeTab: this.props.location.state.tab
+      });
+    }
+  }
 
   normFile = e => {
     if (Array.isArray(e)) {
@@ -25,23 +39,26 @@ class CompanyProfile extends Component {
     return e && e.fileList;
   };
 
-  handleChange = info => {
+  handleChange = (type) => info => {
+    if(type === 'logo') {
+      this.setState({
+        logoSelected: info.fileList.length > 0
+      });
+    } else if(type === 'coverPhoto') {
+      this.setState({
+        coverPhotoSelected: info.fileList.length > 0
+      });
+    }
+    
+  };
+
+  handleTabChange = (key) => {
     this.setState({
-      logoSelected: info.fileList.length > 0
+      activeTab: key
     });
-  };
+  }
 
-  getActiveTab = () => {
-    if (this.props.isRegistering) {
-      return 'basic';
-    }
 
-    if (!has(this.props.location, 'state.tab')) {
-      return 'basic';
-    }
-
-    return this.props.location.state.tab;
-  };
 
   handleWebsiteChange = (value) => {
     let autoCompleteResult;
@@ -57,9 +74,9 @@ class CompanyProfile extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         let logo;
         if (values.logo) {
           if (isString(values.logo)) {
@@ -68,7 +85,15 @@ class CompanyProfile extends Component {
             logo = values.logo[0].originFileObj;
           }
         }
-        this.props.submitForm(Object.assign({}, values, { logo }));
+        let coverPhoto;
+        if (values.coverPhoto) {
+          if (isString(values.coverPhoto)) {
+            coverPhoto = values.coverPhoto;
+          } else if (isArray(values.coverPhoto) && values.coverPhoto.length > 0) {
+            coverPhoto = values.coverPhoto[0].originFileObj;
+          }
+        }
+        this.props.submitForm(Object.assign({ section: this.state.activeTab }, values, { logo, coverPhoto }));
       }
     });
   };
@@ -76,7 +101,7 @@ class CompanyProfile extends Component {
   render() {
     const { isRegistering } = this.props;
     const { getFieldDecorator, getFieldProps } = this.props.form;
-    const { logoSelected, autoCompleteResult } = this.state;
+    const { logoSelected, coverPhotoSelected, autoCompleteResult } = this.state;
 
     const websiteOptions = autoCompleteResult.map(website => (
       <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
@@ -141,14 +166,14 @@ class CompanyProfile extends Component {
       </div>
     );
 
-    const renderUpload = () => {
+    const renderLogoUpload = () => {
       if (getFieldProps('logo').value && !logoSelected) {
         return (
           <Upload
             name="logo"
             className="avatar-uploader"
             listType="picture-card"
-            onChange={this.handleChange}
+            onChange={this.handleChange('logo')}
           >
             <img width="100" src={getFieldProps('logo').value} alt="Logo" />
           </Upload>
@@ -161,9 +186,36 @@ class CompanyProfile extends Component {
           name="logo"
           className="avatar-uploader"
           listType="picture-card"
-          onChange={this.handleChange}
+          onChange={this.handleChange('logo')}
         >
           {!logoSelected && uploadButton}
+        </Upload>
+      );
+    };
+
+    const renderCoverPhotoUpload = () => {
+      if (getFieldProps('coverPhoto').value && !coverPhotoSelected) {
+        return (
+          <Upload
+            name="coverPhoto"
+            className="avatar-uploader"
+            listType="picture-card"
+            onChange={this.handleChange('coverPhoto')}
+          >
+            <img width="100" src={getFieldProps('coverPhoto').value} alt="coverPhoto" />
+          </Upload>
+        );
+      }
+      return getFieldDecorator('coverPhoto', {
+        getValueFromEvent: this.normFile
+      })(
+        <Upload
+          name="coverPhoto"
+          className="avatar-uploader"
+          listType="picture-card"
+          onChange={this.handleChange('coverPhoto')}
+        >
+          {!coverPhotoSelected && uploadButton}
         </Upload>
       );
     };
@@ -171,7 +223,7 @@ class CompanyProfile extends Component {
     return (
       <Spin spinning={this.props.isSubmitting}>
         <Form onSubmit={this.handleSubmit}>
-          <Tabs defaultActiveKey={this.getActiveTab()} tabPosition="top">
+          <Tabs defaultActiveKey={this.state.activeTab} tabPosition="top" onChange={this.handleTabChange}>
             <TabPane
               tab="Basic information (Required)"
               key="basic"
@@ -188,8 +240,12 @@ class CompanyProfile extends Component {
                 })(<Input />)}
               </FormItem>
 
-              <FormItem {...formItemLayout} label="Upload">
-                {renderUpload()}
+              <FormItem {...formItemLayout} label="Logo">
+                {renderLogoUpload()}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label="Cover Photo">
+                {renderCoverPhotoUpload()}
               </FormItem>
 
               <FormItem {...formItemLayout} label="Phone Number" hasFeedback>
@@ -314,13 +370,13 @@ class CompanyProfile extends Component {
             )}
             {!isRegistering && (
               <TabPane
-                tab="Cover photos"
-                key="coverPhotos"
+                tab="Photo gallery"
+                key="photoGallery"
                 style={{ paddingTop: 20 }}
               >
                 <FormItem {...metaFormItemLayout}>
-                  {getFieldDecorator('coverPhotos')(
-                    <CoverPhotos />
+                  {getFieldDecorator('photoGallery')(
+                    <PhotoGallery />
                   )}
                 </FormItem>
                 <FormItem {...metaTailFormItemLayout}>
