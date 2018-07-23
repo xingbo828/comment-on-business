@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Upload, Icon, Modal } from 'antd';
+import { Upload, Icon, Modal, Card } from 'antd';
 
 class PhotoGallery extends Component {
 
@@ -19,8 +19,12 @@ class PhotoGallery extends Component {
 
   handleChange = ({ fileList }) => {
     this.setState({ fileList })
-    console.log(fileList)
-    this.props.onChange(fileList)
+    this.props.onChange(fileList.map(file => {
+      if(file.name) {
+        return file
+      }
+      return file.url
+    }))
   }
 
   customRequest = ({ onSuccess, onError, file }) => {
@@ -42,7 +46,7 @@ class PhotoGallery extends Component {
       </div>
     );
     return (
-      <React.Fragment>
+      <Card title="Photo Gallery">
         <Upload
           listType="picture-card"
           fileList={fileList}
@@ -55,7 +59,7 @@ class PhotoGallery extends Component {
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img alt="preview" style={{ width: '100%' }} src={previewImage} />
         </Modal>
-      </React.Fragment>
+      </Card>
     );
   }
 }

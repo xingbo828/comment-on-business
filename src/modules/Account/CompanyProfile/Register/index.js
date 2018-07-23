@@ -9,7 +9,7 @@ import {
 import withLayout from '../../../Common/withLayout';
 import isLoggedIn from '../../../Common/isLoggedIn';
 import OneColumnLayout from '../../../Common/Layout/OneColumnLayout';
-import CompanyProfileForm from '../CompanyProfileForm';
+import Basic from '../Edit/Basic/Basic';
 import { createProvider } from '../../accountAction';
 
 const mapDispatchToProps = (dispatch, { uid }) => ({
@@ -26,23 +26,19 @@ const enhance = compose(
       isSubmitting: initialValue,
     }),
     {
-      updateIsSubmitting: ({ isSubmitting }) => (value) => ({
+      updateIsSubmitting: () => (value) => ({
         isSubmitting: value
       })
     }
   ),
   withProps(props => ({
-    isRegistering: true,
     submitForm: async (providerInfo) => {
       props.updateIsSubmitting(true)
       try {
         await props.createProvider(providerInfo);
         message.success('Company profile created');
         props.history.push({
-          pathname: '/company-profile/edit',
-          state: {
-            tab: 'payment-methods'
-          }
+          pathname: '/company-profile/payment-methods'
         })
       } catch(error) {
         message.error(error);
@@ -53,4 +49,4 @@ const enhance = compose(
   Form.create()
 );
 
-export default enhance(CompanyProfileForm);
+export default enhance(Basic);

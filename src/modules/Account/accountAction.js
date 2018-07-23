@@ -46,49 +46,75 @@ const _updateUserProviders = async providerRef => {
 };
 
 
-const _mapPhotoGalleryToUrls = async (photoGallery, providerId) => {
-  const promises = photoGallery.map(c => _uploadPhoto(c, providerId));
-  return Promise.all(promises);
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+
+export const createProvider = providerInfo => async dispatch => {
+  const providerDocRef = await providerCollectionRef.add({});
+  const providerId = providerDocRef.id;
+  await _updateBasicProfile(dispatch)(providerId, providerInfo, true);
+  return await setDefaultProvider(providerId)(dispatch)
 };
 
-const _updateProviderProfile = async (providerId, providerInfo, dispatch) => {
-  const logo = await _uploadPhoto(providerInfo.logo, providerId); 
-  
-  const coverPhoto = await _uploadPhoto(providerInfo.coverPhoto, providerId);
-  let updatedProviderInfo = isUndefined(logo) ? omit(providerInfo, ['logo']) : Object.assign(providerInfo, {
-    logo
-  });
-  updatedProviderInfo = isUndefined(coverPhoto) ? omit(providerInfo, ['coverPhoto']) : Object.assign(providerInfo, {
-    coverPhoto
-  });
-  const photoGallery = await _mapPhotoGalleryToUrls(providerInfo.photoGallery || [], providerId);
-  updatedProviderInfo = Object.assign(updatedProviderInfo, { photoGallery });
-  const providerDocRef = providerCollectionRef.doc(providerId);
-  const updatedProviderInfoWithoutUndefined = omitBy(updatedProviderInfo, isUndefined);
-  providerDocRef.update(updatedProviderInfoWithoutUndefined);
-  await _updateUserProviders(providerDocRef);
+export const editProvider = (config) => async dispatch => {
+  const { type, providerId } = config;
+  if (type === 'basic') {
+    return await _updateBasicProfile(dispatch)(providerId, omit(config, ['type', 'providerId']), false);
+  } else if (type === 'payment-methods') {
+    return await _updatePaymentMethods(dispatch)(providerId, omit(config, ['type', 'providerId']))
+  } else if(type === 'review-services') {
+    return await _updateReviewServices(dispatch)(providerId, omit(config, ['type', 'providerId']))
+  } else if (type === 'photo-gallery') {
+    return await _updatePhotoGallery(dispatch)(providerId, omit(config, ['type', 'providerId']))
+  } else {
+    throw new Error('unknown type');
+  }
+}
+
+const _updateStorePostEdit = (dispatch) => async (providerDocRef, providerId) =>{
   const providerDataPromise = await providerDocRef.get();
   const providerData = providerDataPromise.data();
   return dispatch({
     type: UPDATE_PROFILE,
     data: {
-      providerId: providerId,
+      providerId,
       providerInfo: { ...providerData, id: providerId }
     }
   })
 }
 
-export const UPDATE_PROFILE = 'UPDATE_PROFILE';
-export const createProvider = providerInfo => async dispatch => {
-  const providerDocRef = await providerCollectionRef.add({});
-  const providerId = providerDocRef.id;
-  await _updateProviderProfile(providerId, providerInfo, dispatch);
-  return await setDefaultProvider(providerId)(dispatch)
+const _updateBasicProfile = dispatch => async (providerId, profile, newProfile=false) => {
+  const logo = await _uploadPhoto(profile.logo, providerId); 
+  const coverPhoto = await _uploadPhoto(profile.coverPhoto, providerId);
+  const providerDocRef = providerCollectionRef.doc(providerId);
+  const updatedProviderInfoWithoutUndefined = omitBy(Object.assign(profile, { logo, coverPhoto }), isUndefined);
+  await providerDocRef.update(updatedProviderInfoWithoutUndefined);
+  
+  if(newProfile) {
+    await _updateUserProviders(providerDocRef);
+  }
+  return await _updateStorePostEdit(dispatch)(providerDocRef, providerId)
+}
+
+const _updatePaymentMethods = dispatch => async (providerId, profile) => {
+  const providerDocRef = providerCollectionRef.doc(providerId);
+  await providerDocRef.update(profile);
+  return await _updateStorePostEdit(dispatch)(providerDocRef, providerId)
 };
 
-export const editProvider = (providerId, providerInfo) => async dispatch => {
-  return await _updateProviderProfile(providerId, providerInfo, dispatch);
-}
+const _updateReviewServices = dispatch => async (providerId, profile) => {
+  const providerDocRef = providerCollectionRef.doc(providerId);
+  await providerDocRef.update(profile);
+  return await _updateStorePostEdit(dispatch)(providerDocRef, providerId)
+};
+
+const _updatePhotoGallery = dispatch => async (providerId, profile) => {
+  const providerDocRef = providerCollectionRef.doc(providerId);
+  const promises = profile.photoGallery.map(c => _uploadPhoto(c, providerId));
+  const photoGallery = await Promise.all(promises);
+  await providerDocRef.update({ photoGallery });
+  return await _updateStorePostEdit(dispatch)(providerDocRef, providerId)
+};
+
 
 
 export const DEFAULT_PROVIDER_CHANGE = 'DEFAULT_PROVIDER_CHANGE';

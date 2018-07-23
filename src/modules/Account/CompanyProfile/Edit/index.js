@@ -1,65 +1,47 @@
-import { connect } from 'react-redux';
-import { compose, withStateHandlers, withProps } from 'recompose';
-import { Form, message } from 'antd';
-
+import React from 'react';
 import withLayout from '../../../Common/withLayout';
-import mapImmutablePropsToPlainProps from '../../../Common/mapImmutablePropsToPlainProps';
-import DashboardLayout from '../../../Common/Layout/DashboardLayout';
-import CompanyProfileForm from '../CompanyProfileForm';
-import { editProvider } from '../../accountAction';
+import { Route, Switch } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import { compose, withStateHandlers } from 'recompose';
 
+import Basic from './Basic';
+import PaymentMethods from './PaymentMethods';
+import PhotoGallery from './PhotoGallery';
+import ReviewServices from './ReviewServices';
 import { getSelectedProviderProfile } from '../../accountReducer';
+import { editProvider } from '../../accountAction';
+import DashboardLayout from '../../../Common/Layout/DashboardLayout';
+import mapImmutablePropsToPlainProps from '../../../Common/mapImmutablePropsToPlainProps';
 
-const mapDispatchToProps = dispatch => ({
-  editProvider: (providerId, providerInfo) =>
-    dispatch(editProvider(providerId, providerInfo))
-});
+
+const mapDispatchToProps = dispatch => bindActionCreators({ editProvider }, dispatch)
+
+const EditProfile = ({ match, ...rest }) => {
+  return (
+    <Switch>
+      <Route path={`${match.url}/basic`} render={() => <Basic {...rest}/> } />
+      <Route path={`${match.url}/payment-methods`} render={() => <PaymentMethods {...rest}/> } />
+      <Route path={`${match.url}/review-services`} render={() => <ReviewServices {...rest}/> } />
+      <Route path={`${match.url}/photo-gallery`} render={() => <PhotoGallery {...rest}/> } />
+    </Switch>
+  );
+};
 
 const enhance = compose(
-  withLayout(DashboardLayout),
   connect(getSelectedProviderProfile, mapDispatchToProps),
-  mapImmutablePropsToPlainProps,
   withStateHandlers(
     ({ initialValue = false }) => ({
       isSubmitting: initialValue,
     }),
     {
-      updateIsSubmitting: ({ isSubmitting }) => (value) => ({
+      updateIsSubmitting: () => (value) => ({
         isSubmitting: value
       })
     }
   ),
-  withProps(props => ({
-    isRegistering: false,
-    submitForm: async (providerInfo) => {
-      props.updateIsSubmitting(true)
-      try {
-        await props.editProvider(props.selectedProviderProfile.id, providerInfo);
-        message.success('Company profile updated');
-      } catch(error) {
-        message.error(error);
-      }
-      props.updateIsSubmitting(false)
-      
-    }
-  })),
-  Form.create({
-    mapPropsToFields({ selectedProviderProfile }) {
-      return {
-        name: Form.createFormField({ value: selectedProviderProfile.name }),
-        email: Form.createFormField({ value: selectedProviderProfile.email }),
-        phoneNumber: Form.createFormField({ value: selectedProviderProfile.phoneNumber }),
-        website: Form.createFormField({ value: selectedProviderProfile.website }),
-        description: Form.createFormField({ value: selectedProviderProfile.description }),
-        logo: Form.createFormField({ value: selectedProviderProfile.logo }),
-        coverPhoto: Form.createFormField({ value: selectedProviderProfile.coverPhoto }),
-        paymentMethods: Form.createFormField({ value: selectedProviderProfile.paymentMethods || {} }),
-        reviewInfo: Form.createFormField({ value: selectedProviderProfile.reviewInfo || {} }),
-        receiveEmail: Form.createFormField({ value: selectedProviderProfile.receiveEmail }),
-        photoGallery: Form.createFormField({ value: selectedProviderProfile.photoGallery }),
-      };
-    }
-  })
-);
+  mapImmutablePropsToPlainProps,
+  withLayout(DashboardLayout)
+)
 
-export default enhance(CompanyProfileForm);
+export default enhance(EditProfile);

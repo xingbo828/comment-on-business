@@ -12,7 +12,6 @@ import ResetPassword from './modules/Account/ResetPassword';
 import RegisterCompany from './modules/Account/CompanyProfile/Register';
 import EditCompanyProfile from './modules/Account/CompanyProfile/Edit';
 import Project from './modules/Project';
-// import Conversation from './modules/Conversation';
 
 class App extends Component {
   render() {
@@ -26,8 +25,7 @@ class App extends Component {
           <Route path="/reset-password" component={ResetPassword} />
           <ProtectedRoute path="/register" component={RegisterCompany} />
           <ProtectedRoute path="/projects" component={Project} />
-          {/* <ProtectedRoute path="/conversations" component={Conversation} /> */}
-          <ProtectedRoute exact path="/company-profile/edit" component={EditCompanyProfile} />
+          <ProtectedRoute path="/company-profile" component={EditCompanyProfile} />
         </Switch>
       </Router>
     );
