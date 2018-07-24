@@ -1,0 +1,30 @@
+[
+  {
+    "value": "MOVE",
+    "label": "Move",
+    "subTypes": [
+      {
+        "value": "DELIVERY",
+        "label": "Delivery"
+      },
+      {
+        "value": "STORAGE",
+        "label": "Storage"
+      }
+    ]
+  },
+  {
+    "value": "CLEANING",
+    "label": "Cleaning",
+    "subTypes": [
+      {
+        "value": "GENERAL_CLEANING",
+        "label": "General Cleaning"
+      },
+      {
+        "value": "CARPET_CLEAN",
+        "label": "Carpet Cleaning"
+      }
+    ]
+  }
+]

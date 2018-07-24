@@ -21,13 +21,14 @@ const enhance = compose(
     mapPropsToFields({ selectedProviderProfile }) {
       return {
         name: Form.createFormField({ value: selectedProviderProfile.name }),
+        businessType: Form.createFormField({ value: selectedProviderProfile.businessType }),
         email: Form.createFormField({ value: selectedProviderProfile.email }),
         phoneNumber: Form.createFormField({ value: selectedProviderProfile.phoneNumber }),
         website: Form.createFormField({ value: selectedProviderProfile.website }),
         description: Form.createFormField({ value: selectedProviderProfile.description }),
         logo: Form.createFormField({ value: selectedProviderProfile.logo }),
         coverPhoto: Form.createFormField({ value: selectedProviderProfile.coverPhoto }),
-        receiveEmail: Form.createFormField({ value: selectedProviderProfile.receiveEmail }),
+        receiveEmail: Form.createFormField({ value: selectedProviderProfile.receiveEmail })
       };
     }
   })

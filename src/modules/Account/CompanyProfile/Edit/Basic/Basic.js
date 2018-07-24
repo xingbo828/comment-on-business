@@ -4,6 +4,7 @@ import isString from 'lodash/isString';
 import isArray from 'lodash/isArray';
 
 import RichEditor from '../../components/RichEditor';
+import BusinessType, { validator as BusinessTypeValidator} from '../../components/BusinessType';
 
 const FormItem = Form.Item;
 const AutoCompleteOption = AutoComplete.Option;
@@ -176,6 +177,16 @@ class Basic extends Component {
                     }
                   ]
                 })(<Input />)}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label="Business Type" hasFeedback required>
+                {getFieldDecorator('businessType', {
+                  rules: [
+                    {
+                      validator: BusinessTypeValidator
+                    }
+                  ]
+                })(<BusinessType />)}
               </FormItem>
 
               <FormItem {...formItemLayout} label="Logo">

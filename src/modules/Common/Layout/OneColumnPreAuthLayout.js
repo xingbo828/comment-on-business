@@ -5,10 +5,8 @@ import style from 'styled-components'
 const { Content } = Layout;
 
 const StyledLayout = style(Layout)`
-  height: 100vh;
   padding-top: 200px;
   background-image: url(https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg);
-  background-repeat: no-repeat;
   background-position: center 110px;
   background-size: 100%;
 `;
