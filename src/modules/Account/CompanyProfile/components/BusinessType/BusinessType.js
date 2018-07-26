@@ -35,14 +35,14 @@ class BusinessType extends Component {
     const { primaryType, subTypes } = this.state;
     const selectedType = availableTypes.find(t => t.value === primaryType)
     return (
-      <div style={{display: 'inline-block'}}>
+      <div style={{display: 'inline-flex', width: '100%'}}>
         <Select onChange={this.selectPrimaryType} style={{ width: 120 }} value={primaryType}>
         {availableTypes.map(t => (
           <Option key={t.value} value={t.value}>{t.label}</Option>
         ))}
         </Select>
         {get(selectedType, 'subTypes') && (
-          <Select onChange={this.selectSubTypes} style={{ marginLeft: 8, width: 350 }} value={subTypes} mode="multiple">
+          <Select onChange={this.selectSubTypes} style={{ marginLeft: 8, flex: '1' }} value={subTypes} mode="multiple">
             {get(selectedType, 'subTypes').map(t => (
               <Option key={t.value} value={t.value}>{t.label}</Option>
             ))}

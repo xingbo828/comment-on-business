@@ -1,0 +1,42 @@
+[
+  {
+    "name": "British Columbia",
+    "code": "BC",
+    "cities": [
+      {
+        "name": "Vancouver",
+        "code": "VANCOUVER"
+      },
+      {
+        "name": "Burnaby",
+        "code": "BURNABY"
+      },
+      {
+        "name": "Delta",
+        "code": "DELTA"
+      },
+      {
+        "name": "Surrey",
+        "code": "SURREY"
+      },
+      {
+        "name": "New Westminster",
+        "code": "NEW_WESTMINSTER"
+      }
+    ]
+  },
+  {
+    "name": "Alberta",
+    "code": "AB",
+    "cities": [
+      {
+        "name": "Calgary",
+        "code": "calgary"
+      },
+      {
+        "name": "Edmonton",
+        "code": "EDMONTON"
+      }
+    ]
+  }
+]

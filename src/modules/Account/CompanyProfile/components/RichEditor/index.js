@@ -34,8 +34,7 @@ class RichEditor extends Component {
           lang={'en'}
           importContent={this.state.initContent}
           cbReceiver={this.receiveMarkdown}
-          pasteNoStyle={false}
-          inlineStyle={false}
+          blockStyle={false}
           image={false}
           video={false}
           audio={false}

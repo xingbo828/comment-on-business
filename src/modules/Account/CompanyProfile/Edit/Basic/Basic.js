@@ -5,7 +5,7 @@ import isArray from 'lodash/isArray';
 
 import RichEditor from '../../components/RichEditor';
 import BusinessType, { validator as BusinessTypeValidator} from '../../components/BusinessType';
-
+import ServiceAreas, { validator as ServiceAreasValidator } from '../../components/ServiceAreas';
 const FormItem = Form.Item;
 const AutoCompleteOption = AutoComplete.Option;
 
@@ -195,6 +195,16 @@ class Basic extends Component {
 
               <FormItem {...formItemLayout} label="Cover Photo">
                 {this.renderCoverPhotoUpload(getFieldProps, getFieldDecorator)(coverPhotoSelected)}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label="Service Areas" hasFeedback required>
+                {getFieldDecorator('businessServiceAreas', {
+                  rules: [
+                    {
+                      validator: ServiceAreasValidator
+                    }
+                  ]
+                })(<ServiceAreas />)}
               </FormItem>
 
               <FormItem {...formItemLayout} label="Phone Number" hasFeedback>
