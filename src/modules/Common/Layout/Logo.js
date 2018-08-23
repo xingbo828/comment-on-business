@@ -25,7 +25,7 @@ const Logo = ({ selectedProviderProfile, availableProviderProfiles, setDefaultPr
   const menu = (
     <Menu onClick={handleChange}>
       {availableProviderProfiles.map(p => (
-        <Menu.Item key={p.id}>
+        <Menu.Item key={p.id} style={{ padding: '1rem' }}>
             {p.name}
         </Menu.Item>
       ))}

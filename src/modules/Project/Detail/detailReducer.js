@@ -2,7 +2,10 @@ import Immutable from 'immutable';
 import {
   GET_MY_PROJECT_DETAIL_PENDING,
   GET_MY_PROJECT_DETAIL_SUCCESS,
-  GET_MY_PROJECT_DETAIL_FAIL
+  GET_MY_PROJECT_DETAIL_FAIL,
+  // UPDATE_MY_PROJECT_FAIL,
+  UPDATE_MY_PROJECT_SUCCESS,
+  // UPDATE_MY_PROJECT_PENDING
 } from '../projectAction';
 
 const initState = Immutable.fromJS({
@@ -26,6 +29,13 @@ export default (state = initState, action) => {
     case GET_MY_PROJECT_DETAIL_FAIL: {
       return state.withMutations(st => {
         st.setIn([action.projectId, 'status'], 'FAILED');
+      });
+    }
+
+    case UPDATE_MY_PROJECT_SUCCESS: {
+      console.log(action.data)
+      return state.withMutations(st => {
+        st.setIn([action.projectId, 'projectDetail'], Immutable.fromJS(action.data));
       });
     }
 

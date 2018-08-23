@@ -13,11 +13,12 @@ const ProfileDropdown = ({ user, logout }) => {
   };
 
   const profileDropDown = (
-    <Menu  onClick={clickHandler}>
-      <Menu.Item key="register">
-          <Link to="/register" style={{display: 'block'}}><Icon type="shop" /> Register new company</Link>
+    <Menu onClick={clickHandler}>
+      <Menu.Item key="register" style={{ padding: '1rem' }}>
+        <Link to="/register" style={{display: 'block'}}><Icon type="shop" /> Register new company</Link>
       </Menu.Item>
-      <Menu.Item key="logout">
+      <Menu.Divider />
+      <Menu.Item key="logout" style={{ padding: '1rem' }}>
         <Icon type="logout" /> Logout
       </Menu.Item>
     </Menu>

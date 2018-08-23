@@ -25,7 +25,7 @@ const createHttpClient = () => {
 
   const onError = (error) => {
     console.error('Error', error);
-    return error;
+    throw error;
   };
 
   client.interceptors.response.use(onSuccess, onError);

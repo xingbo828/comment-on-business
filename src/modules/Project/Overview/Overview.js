@@ -1,7 +1,8 @@
 import React from 'react';
-import { 
+import truncate from 'lodash/truncate';
+import {
   Table,
-  //  Badge, 
+  Badge,
   // Tabs
   } from 'antd';
 import { Link } from 'react-router-dom';
@@ -23,6 +24,20 @@ const ProjectOverview = ({ projectsOverview: { projects, status } }) => {
 
   const myProjectsColumns = [
     {
+      title: 'Status',
+      width: 100,
+      align: 'center',
+      dataIndex: 'providerStatus',
+      filters: [
+        { value: 'ACTIVE', text: 'active' },
+        { value: 'INACTIVE', text: 'inactive' },
+      ],
+      filteredValue: ['ACTIVE'],
+      filterMultiple: false,
+      onFilter: (value, record) => record.providerStatus === value,
+      render: (text) => text === 'INACTIVE' ? <Badge status="error" /> : <Badge status="success" />
+    },
+    {
       title: 'Customer',
       dataIndex: 'customerName',
       sorter: (a, b) => a.customerName > b.customerName
@@ -38,6 +53,11 @@ const ProjectOverview = ({ projectsOverview: { projects, status } }) => {
       sorter: (a, b) => {
         return a.creationDate > b.creationDate
       }
+    },
+    {
+      title: 'Notes',
+      dataIndex: 'notes',
+      render: (text) => truncate(text, { length: 50 })
     },
     {
       title: 'Action',

@@ -9,7 +9,6 @@ import {
 
 export default compose(
   withProps({
-
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `350px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
@@ -17,7 +16,7 @@ export default compose(
   withGoogleMap,
   lifecycle({
     componentDidMount() {
-      const { google, pickUpAddress, deliveryAddress } = this.props;
+      const { google, pickUpAddress, deliveryAddress, callback } = this.props;
       const DirectionsService = new google.maps.DirectionsService();
 
       DirectionsService.route({
@@ -26,6 +25,7 @@ export default compose(
         travelMode: google.maps.TravelMode.DRIVING,
       }, (result, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
+          callback(result['routes'][0]['legs'][0]['distance']['text'])
           this.setState({
             directions: result,
           });
@@ -38,7 +38,12 @@ export default compose(
 )(props =>
   <GoogleMap
     defaultZoom={7}
-    options={{streetViewControl: false}}
+    options={
+      {
+        streetViewControl: false,
+        mapTypeControl: false
+      }
+    }
   >
     {props.directions && <DirectionsRenderer directions={props.directions} />}
   </GoogleMap>
