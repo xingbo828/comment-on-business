@@ -106,7 +106,7 @@ class Basic extends Component {
   );
 
   getSlug = () => {
-    const { getFieldValue, isFieldTouched } = this.props.form;
+    const { getFieldValue } = this.props.form;
     const prefix = process.env.REACT_APP_ENV === 'production' ? 'https://inneed.ca/profile/' : 'https://dev.inneed.ca/profile/';
     const converSlug = (name) => {
       const n = name || ''
@@ -129,11 +129,7 @@ class Basic extends Component {
       return concatPrefix(prefix, converSlug(getFieldValue('name')))
     }
     else{
-      if (isFieldTouched('name') === true) {
-        return concatPrefix(prefix, converSlug(getFieldValue('name')))
-      } else {
-        return concatPrefix(prefix, this.props.selectedProviderProfile.slug)
-      }
+      return concatPrefix(prefix, this.props.selectedProviderProfile.slug)
     }
   }
 
