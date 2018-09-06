@@ -9,11 +9,13 @@ const StyledLayout = style(Layout)`
   background-image: url(https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg);
   background-position: center 110px;
   background-size: 100%;
+  height: 100vh;
 `;
 
 const StyledContent = style(Content)`
   margin: 0 auto;
-  width: 368px;
+  width: 350px;
+  flex: 0 0 auto;
 `;
 
 const OneColumnLayoutPreAuth = ({ children }) => {

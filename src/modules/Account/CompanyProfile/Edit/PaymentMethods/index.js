@@ -14,7 +14,6 @@ const enhance = compose(
         message.error(error);
       }
       props.updateIsSubmitting(false)
-      
     }
   })),
   Form.create({

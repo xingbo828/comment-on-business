@@ -67,20 +67,20 @@ const enhance = compose(
     }
   ),
   withHandlers({
-    handleMenuClick: props => e => {
-      if (e.key === 'notes') {
-        props.showNotesFormDrawer();
-      } else if(e.key === 'archive') {
-        props.archiveProject({
-          providerId: props.selectedProviderProfile.id,
-          projectId: props.match.params.projectId
-        });
-      } else if(e.key === 'restore') {
-        props.restoreProject({
-          providerId: props.selectedProviderProfile.id,
-          projectId: props.match.params.projectId
-        });
-      }
+    handleRestore: props => e => {
+      props.restoreProject({
+        providerId: props.selectedProviderProfile.id,
+        projectId: props.match.params.projectId
+      });
+    },
+    handleArchive: props => e => {
+      props.archiveProject({
+        providerId: props.selectedProviderProfile.id,
+        projectId: props.match.params.projectId
+      });
+    },
+    handleEditNotes: props => e => {
+      props.showNotesFormDrawer();
     }
   }),
   branch(props => {

@@ -7,7 +7,7 @@ import { compose, withStateHandlers } from 'recompose';
 
 import Basic from './Basic';
 import PaymentMethods from './PaymentMethods';
-import PhotoGallery from './PhotoGallery';
+// import PhotoGallery from './PhotoGallery';
 import ReviewServices from './ReviewServices';
 import { getSelectedProviderProfile } from '../../accountReducer';
 import { editProvider } from '../../accountAction';
@@ -23,7 +23,7 @@ const EditProfile = ({ match, ...rest }) => {
       <Route path={`${match.url}/basic`} render={() => <Basic {...rest}/> } />
       <Route path={`${match.url}/payment-methods`} render={() => <PaymentMethods {...rest}/> } />
       <Route path={`${match.url}/review-services`} render={() => <ReviewServices {...rest}/> } />
-      <Route path={`${match.url}/photo-gallery`} render={() => <PhotoGallery {...rest}/> } />
+      {/* <Route path={`${match.url}/photo-gallery`} render={() => <PhotoGallery {...rest}/> } /> */}
     </Switch>
   );
 };

@@ -8,6 +8,10 @@
         "label": "Delivery"
       },
       {
+        "value": "PACKAGING",
+        "label": "Packaging"
+      },
+      {
         "value": "STORAGE",
         "label": "Storage"
       }

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Form, Input, Switch, Upload, Button, Icon, Spin, AutoComplete } from 'antd';
 import isString from 'lodash/isString';
 import isArray from 'lodash/isArray';
+import isEmpty from 'lodash/isEmpty'
 
 import RichEditor from '../../components/RichEditor';
 import BusinessType, { validator as BusinessTypeValidator} from '../../components/BusinessType';
-import ServiceAreas, { validator as ServiceAreasValidator } from '../../components/ServiceAreas';
 const FormItem = Form.Item;
 const AutoCompleteOption = AutoComplete.Option;
 
@@ -105,6 +105,38 @@ class Basic extends Component {
     </div>
   );
 
+  getSlug = () => {
+    const { getFieldValue, isFieldTouched } = this.props.form;
+    const prefix = process.env.REACT_APP_ENV === 'production' ? 'https://inneed.ca/profile/' : 'https://dev.inneed.ca/profile/';
+    const converSlug = (name) => {
+      const n = name || ''
+      return n.toString().toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/[^\w-]+/g, '')       // Remove all non-word chars
+        .replace(/-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace(/-+$/, '');            // Trim - from end of text
+    };
+
+    const concatPrefix = (prefix, slug) => {
+      if(isEmpty(slug)) {
+        return ''
+      }
+      return prefix + slug
+    }
+
+    if (this.props.isNewUser) {
+      return concatPrefix(prefix, converSlug(getFieldValue('name')))
+    }
+    else{
+      if (isFieldTouched('name') === true) {
+        return concatPrefix(prefix, converSlug(getFieldValue('name')))
+      } else {
+        return concatPrefix(prefix, this.props.selectedProviderProfile.slug)
+      }
+    }
+  }
+
   renderLogoUpload = (getFieldProps, getFieldDecorator) => logoSelected => {
     if (getFieldProps('logo').value && !logoSelected) {
       return (
@@ -164,7 +196,6 @@ class Basic extends Component {
     const { getFieldDecorator, getFieldProps } = this.props.form;
     const { logoSelected, coverPhotoSelected, autoCompleteResult } = this.state;
 
- 
     return (
       <Spin spinning={this.props.isSubmitting}>
         <Form onSubmit={this.handleSubmit}>
@@ -177,6 +208,10 @@ class Basic extends Component {
                     }
                   ]
                 })(<Input />)}
+              </FormItem>
+
+              <FormItem {...formItemLayout} label="Profile URL" >
+                <Input prefix={<Icon type="link" theme="outlined" />} value={this.getSlug()} />
               </FormItem>
 
               <FormItem {...formItemLayout} label="Business Type" hasFeedback required>
@@ -197,14 +232,15 @@ class Basic extends Component {
                 {this.renderCoverPhotoUpload(getFieldProps, getFieldDecorator)(coverPhotoSelected)}
               </FormItem>
 
-              <FormItem {...formItemLayout} label="Service Areas" hasFeedback required>
-                {getFieldDecorator('businessServiceAreas', {
+              <FormItem {...formItemLayout} label="Service Address" hasFeedback>
+                {getFieldDecorator('businessServiceAddress', {
                   rules: [
                     {
-                      validator: ServiceAreasValidator
+                      required: false,
+                      message: 'Please input your business address'
                     }
                   ]
-                })(<ServiceAreas />)}
+                })(<Input />)}
               </FormItem>
 
               <FormItem {...formItemLayout} label="Phone Number" hasFeedback>
@@ -260,7 +296,6 @@ class Basic extends Component {
                   >
                     <Input addonBefore="Http://" />
                   </AutoComplete>
-                  
                   )}
               </FormItem>
 
@@ -281,7 +316,7 @@ class Basic extends Component {
                   type="primary"
                   htmlType="submit"
                 >
-                  Save
+                  { this.props.isNewUser ? 'Continue' : 'Save'}
                 </Button>
               </FormItem>
         </Form>

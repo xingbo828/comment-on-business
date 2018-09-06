@@ -32,6 +32,7 @@ const enhance = compose(
     }
   ),
   withProps(props => ({
+    isNewUser: true,
     submitForm: async (providerInfo) => {
       props.updateIsSubmitting(true)
       try {

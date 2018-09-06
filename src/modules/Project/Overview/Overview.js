@@ -1,5 +1,6 @@
 import React from 'react';
 import truncate from 'lodash/truncate';
+import toUpper from 'lodash/toUpper';
 import {
   Table,
   Badge,
@@ -38,37 +39,42 @@ const ProjectOverview = ({ projectsOverview: { projects, status } }) => {
       render: (text) => text === 'INACTIVE' ? <Badge status="error" /> : <Badge status="success" />
     },
     {
-      title: 'Customer',
-      dataIndex: 'customerName',
-      sorter: (a, b) => a.customerName > b.customerName
-    },
-    {
-      title: 'ID',
-      dataIndex: 'id'
-    },
-    {
       title: 'Creation date',
       dataIndex: 'creationDate',
+      width: 180,
       render: (text) => text.format('MMMM, DD, YYYY'),
       sorter: (a, b) => {
         return a.creationDate > b.creationDate
       }
     },
     {
-      title: 'Notes',
-      dataIndex: 'notes',
-      render: (text) => truncate(text, { length: 50 })
+      title: 'ID',
+      dataIndex: 'id',
+      width: 100,
+      render: (id) => toUpper(truncate(id, { length: 6, omission: '' }))
+    },
+    {
+      title: 'Customer',
+      dataIndex: 'customerName',
+      width: 200,
+      sorter: (a, b) => a.customerName > b.customerName
     },
     {
       title: 'Action',
       key: 'action',
+      width: 150,
       render: (text, project) => (
         <Link to={{
           pathname: `/projects/${project.id}`,
           state: { projectType: project.type }
         }}>View detail</Link>
       )
-    }
+    },
+    {
+      title: 'Notes',
+      dataIndex: 'notes',
+      render: (text) => truncate(text, { length: 50 })
+    },
   ];
 
   // const activeProjectsColumns = [

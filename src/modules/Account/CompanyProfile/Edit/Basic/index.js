@@ -5,6 +5,7 @@ import Basic from './Basic';
 
 const enhance = compose(
   withProps(props => ({
+    isNewUser: false,
     submitForm: async (providerInfo) => {
       props.updateIsSubmitting(true)
       try {
@@ -14,7 +15,6 @@ const enhance = compose(
         message.error(error);
       }
       props.updateIsSubmitting(false)
-      
     }
   })),
   Form.create({
@@ -22,7 +22,7 @@ const enhance = compose(
       return {
         name: Form.createFormField({ value: selectedProviderProfile.name }),
         businessType: Form.createFormField({ value: selectedProviderProfile.businessType }),
-        businessServiceAreas: Form.createFormField({ value: selectedProviderProfile.businessServiceAreas }),
+        businessServiceAddress: Form.createFormField({ value: selectedProviderProfile.businessServiceAddress }),
         email: Form.createFormField({ value: selectedProviderProfile.email }),
         phoneNumber: Form.createFormField({ value: selectedProviderProfile.phoneNumber }),
         website: Form.createFormField({ value: selectedProviderProfile.website }),

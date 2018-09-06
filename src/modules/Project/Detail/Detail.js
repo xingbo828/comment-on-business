@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react';
-import { Menu, Dropdown, Icon, Row, Col, Divider, Tag } from 'antd';
+import { Button, Tooltip, Icon, Row, Col, Divider, Tag } from 'antd';
 import { Link } from 'react-router-dom';
 
 import get from 'lodash/get';
+import truncate from 'lodash/truncate';
+import toUpper from 'lodash/toUpper';
+
 // import ReplyForm from './ReplyForm';
 import ConfigurationDetail from './ConfigurationDetail';
 import ContactInfoCard from './ContactInfoCard';
@@ -15,7 +18,9 @@ class ProjectDetail extends PureComponent {
     const {
       project,
       isNotesFormDrawerVisible,
-      handleMenuClick,
+      handleEditNotes,
+      handleArchive,
+      handleRestore,
       hideNotesFormDrawer,
       updateProjectNotes,
       selectedProviderProfile,
@@ -24,48 +29,30 @@ class ProjectDetail extends PureComponent {
         state: { projectType }
       }
     } = this.props;
-    const actionMenu = (
-      <Menu onClick={handleMenuClick}>
-        <Menu.Item key="notes" style={{ padding: '1rem' }}>
-          <Icon style={{ fontSize: 18, marginRight: 8 }} type="edit" />
-          Add Notes
-        </Menu.Item>
-        <Menu.Divider />
-        {get(project, 'projectDetail.receiver.status') !== 'INACTIVE' && <Menu.Item key="archive" style={{ padding: '1rem' }}>
-          <Icon style={{ fontSize: 18, marginRight: 8 }} type="delete" />
-          Archive
-        </Menu.Item>}
-        {get(project, 'projectDetail.receiver.status') === 'INACTIVE' && <Menu.Item key="restore" style={{ padding: '1rem' }}>
-          <Icon style={{ fontSize: 18, marginRight: 8 }} type="clock-circle-o" />
-          Restore
-        </Menu.Item>}
-      </Menu>
-    );
     return (
       <React.Fragment>
-        <Row style={{marginBottom: '1rem'}}>
+        <Row type="flex" justify="space-between">
           <Col>
             <Link to="/projects">
               <Icon type="left" /> Back to overview
             </Link>
           </Col>
-        </Row>
-        <Row type="flex" justify="space-between">
           <Col>
-            <h1 style={{ fontSize: '1.325rem'}}>Project: {get(project, 'projectDetail.id')}</h1>
-            {get(project, 'projectDetail.receiver.status') === 'INACTIVE' && <Tag color="#f50">Archived</Tag> }
-          </Col>
-          <Col>
-            <Dropdown
-              overlay={actionMenu}
-              trigger={['click']}
-              placement="bottomRight"
-            >
-              <Icon type="bars" style={{ fontSize: 30, cursor: 'pointer' }} />
-            </Dropdown>
+            <h1 style={{ fontSize: '1.325rem' }}>
+              Project:{' '}
+              {toUpper(
+                truncate(get(project, 'projectDetail.id'), {
+                  length: 6,
+                  omission: ''
+                })
+              )}
+            </h1>
+            {get(project, 'projectDetail.receiver.status') === 'INACTIVE' && (
+              <Tag color="#f50">Archived</Tag>
+            )}
           </Col>
         </Row>
-        <Divider />
+        <Divider style={{marginTop: 0}} />
         {/* <Steps project={project} projectType={projectType} /> */}
         {/* <Hint project={project} projectType={projectType} /> */}
         <ContactInfoCard project={project} />
@@ -84,6 +71,69 @@ class ProjectDetail extends PureComponent {
           isNotesFormDrawerVisible={isNotesFormDrawerVisible}
           hideNotesFormDrawer={hideNotesFormDrawer}
         />
+        <div
+          style={{
+            width: 120,
+            position: 'fixed',
+            justifyContent: 'space-between',
+            display: 'flex',
+            bottom: 20,
+            right: 60,
+            zIndex: 999
+          }}
+        >
+          <Tooltip placement="top" title="view / edit my notes">
+            <Button
+              onClick={handleEditNotes}
+              style={{
+                width: 50,
+                height: 50,
+                fontSize: '26px',
+                lineHeight: 2.2
+              }}
+              type="primary"
+              shape="circle"
+              icon="form"
+              size="large"
+            />
+          </Tooltip>
+          {get(project, 'projectDetail.receiver.status') !== 'INACTIVE' && (
+            <Tooltip placement="top" title="archive project">
+              <Button
+                onClick={handleArchive}
+                style={{
+                  width: 50,
+                  height: 50,
+                  fontSize: '26px',
+                  lineHeight: 2.2
+                }}
+                type="danger"
+                shape="circle"
+                icon="delete"
+                size="large"
+              />
+            </Tooltip>
+          )}
+          {get(project, 'projectDetail.receiver.status') === 'INACTIVE' && (
+            <Tooltip placement="top" title="restore project">
+              <Button
+                onClick={handleRestore}
+                style={{
+                  width: 50,
+                  height: 50,
+                  fontSize: '26px',
+                  lineHeight: 2.2,
+                  backgroundColor: '#52c41a',
+                  borderColor: '#52c41a'
+                }}
+                type="primary"
+                shape="circle"
+                icon="clock-circle-o"
+                size="large"
+              />
+            </Tooltip>
+          )}
+        </div>
       </React.Fragment>
     );
   }

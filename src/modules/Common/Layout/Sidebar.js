@@ -32,10 +32,10 @@ const Sidebar = ({ history, location }) => {
           key: '/company-profile/review-services',
           text: 'Review Services'
         },
-        {
-          key: '/company-profile/photo-gallery',
-          text: 'Photo Gallery'
-        }
+        // {
+        //   key: '/company-profile/photo-gallery',
+        //   text: 'Photo Gallery'
+        // }
       ]
     }
   ];
