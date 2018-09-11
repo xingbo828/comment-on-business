@@ -38,7 +38,10 @@ class ProjectDetail extends PureComponent {
             </Link>
           </Col>
           <Col>
-            <h1 style={{ fontSize: '1.325rem' }}>
+            {get(project, 'projectDetail.receiver.status') === 'INACTIVE' && (
+              <Tag color="#f50">Archived</Tag>
+            )}
+            <span><h1 style={{ fontSize: '1.325rem' }}>
               Project:{' '}
               {toUpper(
                 truncate(get(project, 'projectDetail.id'), {
@@ -46,10 +49,7 @@ class ProjectDetail extends PureComponent {
                   omission: ''
                 })
               )}
-            </h1>
-            {get(project, 'projectDetail.receiver.status') === 'INACTIVE' && (
-              <Tag color="#f50">Archived</Tag>
-            )}
+            </h1></span>
           </Col>
         </Row>
         <Divider style={{marginTop: 0}} />
@@ -89,7 +89,8 @@ class ProjectDetail extends PureComponent {
                 width: 50,
                 height: 50,
                 fontSize: '26px',
-                lineHeight: 2.2
+                lineHeight: 2.2,
+                boxShadow: '2px 2px 3px #999'
               }}
               type="primary"
               shape="circle"
@@ -105,7 +106,8 @@ class ProjectDetail extends PureComponent {
                   width: 50,
                   height: 50,
                   fontSize: '26px',
-                  lineHeight: 2.2
+                  lineHeight: 2.2,
+                  boxShadow: '2px 2px 3px #999'
                 }}
                 type="danger"
                 shape="circle"
@@ -124,7 +126,8 @@ class ProjectDetail extends PureComponent {
                   fontSize: '26px',
                   lineHeight: 2.2,
                   backgroundColor: '#52c41a',
-                  borderColor: '#52c41a'
+                  borderColor: '#52c41a',
+                  boxShadow: '2px 2px 3px #999'
                 }}
                 type="primary"
                 shape="circle"

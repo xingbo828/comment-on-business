@@ -1,6 +1,6 @@
 import React from 'react';
 import { compose, withProps } from 'recompose';
-import { Menu, Dropdown, Avatar, Icon } from 'antd';
+import { Menu, Dropdown, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import { auth } from '../../../firebaseClient';
 import isLoggedin from '../isLoggedIn';
@@ -15,11 +15,11 @@ const ProfileDropdown = ({ user, logout }) => {
   const profileDropDown = (
     <Menu onClick={clickHandler}>
       <Menu.Item key="register" style={{ padding: '1rem' }}>
-        <Link to="/register" style={{display: 'block'}}><Icon type="shop" /> Register new company</Link>
+        <Link to="/register" style={{display: 'block'}}> Register new company</Link>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="logout" style={{ padding: '1rem' }}>
-        <Icon type="logout" /> Logout
+        Logout
       </Menu.Item>
     </Menu>
   );
@@ -29,7 +29,7 @@ const ProfileDropdown = ({ user, logout }) => {
       placement="bottomCenter"
       trigger={['click']}
     >
-      <a style={{display: 'block'}} className="ant-dropdown-link" href="">
+      <a style={{display: 'block'}} className="" href="">
         { user.photoURL ? <Avatar size="large" src={user.photoURL} /> : <Avatar size="large" icon="user" />}
       </a>
     </Dropdown>
