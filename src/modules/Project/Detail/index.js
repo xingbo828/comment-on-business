@@ -11,8 +11,11 @@ import {
   withHandlers
 } from 'recompose';
 import isUndefined from 'lodash/isUndefined';
+import { message } from 'antd';
+
+
 import { getProjectDetail as getProjectSelector } from './detailReducer';
-import { getProject, archiveProject, restoreProject, updateProjectNotes } from '../projectAction';
+import { getProject, archiveProject, restoreProject, updateProject } from '../projectAction';
 import { getSelectedProviderProfile } from '../../Account/accountReducer';
 import mapImmutablePropsToPlainProps from '../../Common/mapImmutablePropsToPlainProps';
 
@@ -25,7 +28,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       getProject,
-      updateProjectNotes,
+      updateProject,
       archiveProject,
       restoreProject
     },
@@ -59,28 +62,30 @@ const enhance = compose(
   }),
   withStateHandlers(
     {
-      isNotesFormDrawerVisible: false
+      isEditFormDrawerVisible: false
     },
     {
-      showNotesFormDrawer: () => () => ({ isNotesFormDrawerVisible: true }),
-      hideNotesFormDrawer: () => () => ({ isNotesFormDrawerVisible: false })
+      showEditFormDrawer: () => () => ({ isEditFormDrawerVisible: true }),
+      hideEditFormDrawer: () => () => ({ isEditFormDrawerVisible: false })
     }
   ),
   withHandlers({
-    handleRestore: props => e => {
-      props.restoreProject({
+    handleRestore: props => async (e) => {
+      await props.restoreProject({
         providerId: props.selectedProviderProfile.id,
         projectId: props.match.params.projectId
       });
+      message.info('Project restored');
     },
-    handleArchive: props => e => {
-      props.archiveProject({
+    handleArchive: props => async (e) => {
+      await props.archiveProject({
         providerId: props.selectedProviderProfile.id,
         projectId: props.match.params.projectId
       });
+      message.info('Project archived');
     },
-    handleEditNotes: props => e => {
-      props.showNotesFormDrawer();
+    handleEdit: props => e => {
+      props.showEditFormDrawer();
     }
   }),
   branch(props => {

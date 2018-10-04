@@ -40,8 +40,8 @@ const createProjectHttpClient = async (providerId) => {
   const restoreProject = projectId =>
     projectHttpClient.patch(`/projects/${projectId}/status`, { status: 'ACTIVE' })
 
-  const updateNotes = ({ projectId, notes }) =>
-    projectHttpClient.patch(`/projects/${projectId}/notes`, { notes })
+  const update = ({ projectId, detail }) =>
+    projectHttpClient.patch(`/projects/${projectId}`, detail)
 
   return {
     getProject,
@@ -50,7 +50,7 @@ const createProjectHttpClient = async (providerId) => {
     // declineLead,
     archiveProject,
     restoreProject,
-    updateNotes
+    update
   };
 };
 

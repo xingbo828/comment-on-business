@@ -12,6 +12,7 @@ import ResetPassword from './modules/Account/ResetPassword';
 import RegisterCompany from './modules/Account/CompanyProfile/Register';
 import EditCompanyProfile from './modules/Account/CompanyProfile/Edit';
 import Project from './modules/Project';
+import Calendar from './modules/Calendar';
 
 class App extends Component {
   render() {
@@ -25,6 +26,7 @@ class App extends Component {
           <Route path="/reset-password" component={ResetPassword} />
           <ProtectedRoute path="/register" component={RegisterCompany} />
           <ProtectedRoute path="/projects" component={Project} />
+          <ProtectedRoute path="/calendar" component={Calendar} />
           <ProtectedRoute path="/company-profile" component={EditCompanyProfile} />
         </Switch>
       </Router>

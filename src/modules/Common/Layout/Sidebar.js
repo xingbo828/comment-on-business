@@ -13,7 +13,12 @@ const Sidebar = ({ history, location }) => {
     {
       key: '/projects',
       text: 'Projects',
-      icon: 'schedule'
+      icon: 'project'
+    },
+    {
+      key: '/calendar',
+      text: 'My Calendar',
+      icon: 'calendar'
     },
     {
       key: '/company-profile',
@@ -73,11 +78,11 @@ const Sidebar = ({ history, location }) => {
       if(!item.subItems) {
         return (
           <Menu.Item key={item.key}>
-            {item.icon && <Icon type={item.icon} />}
+            {item.icon && <Icon theme="filled" style={{ fontSize: '16px'}} type={item.icon} />}
             <span>{item.text}</span>
           </Menu.Item>
         )
-      } 
+      }
       return (
         <SubMenu key={item.key} title={<span><Icon type={item.icon} />{item.text}</span>}>
           {renderMenuItems(item.subItems)}
@@ -86,7 +91,7 @@ const Sidebar = ({ history, location }) => {
     })
   }
   const openKeys = getSelectKey(config);
-  
+
   return (
     <Sider
       breakpoint="lg"

@@ -104,7 +104,7 @@ const ConfigurationDetail = ({
         <Col xs={24} sm={24} md={24} lg={24} xl={12}>
           <Card
             loading={status === 'PENDING'}
-            title="Contact"
+            title="Customer contact information"
             bordered={true}
             style={{ marginBottom: '.75rem' }}
           >
@@ -134,7 +134,7 @@ const ConfigurationDetail = ({
         <Col xs={24} sm={24} md={24} lg={24} xl={12}>
           <Card
             loading={status === 'PENDING'}
-            title="Dates"
+            title="Customer preferred dates"
             bordered={true}
             style={{ marginBottom: '.75rem' }}
           >
@@ -159,7 +159,7 @@ const ConfigurationDetail = ({
         <Col xs={24} sm={24} md={24} lg={24} xl={12}>
           <Card
             loading={status === 'PENDING'}
-            title="Logistics"
+            title="Moving logistics"
             bordered={true}
             style={{ marginBottom: '.75rem' }}
           >
@@ -180,7 +180,7 @@ const ConfigurationDetail = ({
         <Col xs={24} sm={24} md={24} lg={24} xl={12}>
           <Card
             loading={status === 'PENDING'}
-            title="Items"
+            title="Moving items"
             bordered={true}
             style={{ marginBottom: '.75rem' }}
           >

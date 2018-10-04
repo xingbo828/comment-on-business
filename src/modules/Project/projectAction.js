@@ -82,14 +82,14 @@ export const getProject = (providerId, projectId) => async dispatch => {
   });
 };
 
-export const updateProjectNotes = ({ providerId, projectId, notes }) => async dispatch => {
+export const updateProject = ({ providerId, projectId, detail }) => async dispatch => {
   dispatch({
     type: UPDATE_MY_PROJECT_PENDING,
     projectId
   });
   try {
     const projectHttpClient = await createProjectHttpClient(providerId);
-    const project = await projectHttpClient.updateNotes({ projectId, notes })
+    const project = await projectHttpClient.update({ projectId, detail })
     dispatch({
       type: UPDATE_MY_PROJECT_SUCCESS,
       data: project,

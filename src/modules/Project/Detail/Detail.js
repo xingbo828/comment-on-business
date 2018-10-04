@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { Button, Tooltip, Icon, Row, Col, Divider, Tag } from 'antd';
-import { Link } from 'react-router-dom';
 
 import get from 'lodash/get';
 import truncate from 'lodash/truncate';
@@ -11,18 +10,19 @@ import ConfigurationDetail from './ConfigurationDetail';
 import ContactInfoCard from './ContactInfoCard';
 // import Hint from './Hint';
 // import Steps from './Steps';
-import NotesForm from './NotesForm';
+import EditForm from './EditForm';
 
 class ProjectDetail extends PureComponent {
   render() {
     const {
       project,
-      isNotesFormDrawerVisible,
-      handleEditNotes,
+      history,
+      isEditFormDrawerVisible,
+      handleEdit,
       handleArchive,
       handleRestore,
-      hideNotesFormDrawer,
-      updateProjectNotes,
+      hideEditFormDrawer,
+      updateProject,
       selectedProviderProfile,
       match,
       location: {
@@ -33,9 +33,9 @@ class ProjectDetail extends PureComponent {
       <React.Fragment>
         <Row type="flex" justify="space-between">
           <Col>
-            <Link to="/projects">
-              <Icon type="left" /> Back to overview
-            </Link>
+            <a onClick={history.goBack}>
+              <Icon type="left" /> Back
+            </a>
           </Col>
           <Col>
             {get(project, 'projectDetail.receiver.status') === 'INACTIVE' && (
@@ -63,13 +63,14 @@ class ProjectDetail extends PureComponent {
           projectType={projectType}
         /> */}
         <ConfigurationDetail project={project} projectType={projectType} />
-        <NotesForm
+        <EditForm
           notes={get(project, 'projectDetail.receiver.notes')}
+          date={get(project, 'projectDetail.receiver.date')}
           projectId={match.params.projectId}
           providerId={selectedProviderProfile.id}
-          updateProjectNotes={updateProjectNotes}
-          isNotesFormDrawerVisible={isNotesFormDrawerVisible}
-          hideNotesFormDrawer={hideNotesFormDrawer}
+          updateProject={updateProject}
+          isEditFormDrawerVisible={isEditFormDrawerVisible}
+          hideEditFormDrawer={hideEditFormDrawer}
         />
         <div
           style={{
@@ -82,9 +83,9 @@ class ProjectDetail extends PureComponent {
             zIndex: 999
           }}
         >
-          <Tooltip placement="top" title="view / edit my notes">
+          <Tooltip placement="top" title="Add to calendar">
             <Button
-              onClick={handleEditNotes}
+              onClick={handleEdit}
               style={{
                 width: 50,
                 height: 50,
@@ -94,7 +95,7 @@ class ProjectDetail extends PureComponent {
               }}
               type="primary"
               shape="circle"
-              icon="form"
+              icon="calendar"
               size="large"
             />
           </Tooltip>

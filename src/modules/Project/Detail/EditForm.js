@@ -1,13 +1,15 @@
 import React from 'react';
-import { Drawer, Form, Row, Col, Button, Input, message } from 'antd';
+import { Drawer, Form, Row, Col, Button, Input, message, DatePicker } from 'antd';
+import isEmpty from 'lodash/isEmpty';
+import moment from 'moment'
 
-const NotesForm = ({
+const EditForm = ({
   form,
-  updateProjectNotes,
+  updateProject,
   projectId,
   providerId,
-  isNotesFormDrawerVisible,
-  hideNotesFormDrawer
+  isEditFormDrawerVisible,
+  hideEditFormDrawer
 }) => {
   const { getFieldDecorator } = form;
   const handleSubmit = e => {
@@ -15,32 +17,48 @@ const NotesForm = ({
     form.validateFields(async (err, values) => {
       if (!err) {
         try {
-          await updateProjectNotes(
-            Object.assign(values, { projectId, providerId })
-          );
-          message.success('Notes attached');
-          hideNotesFormDrawer();
+          const status = isEmpty(values.date) ? 'PENDING' : 'ACTIVE'
+          const detail = Object.assign(values, { status });
+          await updateProject({ detail, projectId, providerId });
+          message.success('Successfully saved');
+          hideEditFormDrawer();
         } catch (err) {
-          message.error('Something went wrong');
+          message.error('Something went wrong :(');
         }
       }
     });
   };
   return (
     <Drawer
-      title="My Notes"
+      title="Add to calendar"
       placement="right"
       width={500}
-      onClose={hideNotesFormDrawer}
-      visible={isNotesFormDrawerVisible}
+      destroyOnClose
+      onClose={hideEditFormDrawer}
+      visible={isEditFormDrawerVisible}
     >
       <Form layout="vertical" hideRequiredMark onSubmit={handleSubmit}>
         <Row gutter={16}>
           <Col span={24}>
-            <Form.Item>
+            <Form.Item label="Pick-up date & time">
+              {getFieldDecorator('date', {})(
+                <DatePicker
+                  style={{ width: '100%'}}
+                  size="large"
+                  placeholder="Select project pick-up date & time"
+                  autoFocus
+                  showTime={{format: 'HH:mm', minuteStep: 15}}
+                  format="YYYY-MM-DD HH:mm"
+                />
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={24}>
+            <Form.Item label="Notes">
               {getFieldDecorator('notes', {})(
                 <Input.TextArea
-                  autoFocus
                   rows={10}
                   placeholder="please enter your notes here"
                 />
@@ -65,7 +83,7 @@ const NotesForm = ({
             style={{
               marginRight: 8
             }}
-            onClick={hideNotesFormDrawer}
+            onClick={hideEditFormDrawer}
           >
             Cancel
           </Button>
@@ -81,7 +99,8 @@ const NotesForm = ({
 export default Form.create({
   mapPropsToFields(props) {
     return {
-      notes: Form.createFormField({ value: props.notes })
+      notes: Form.createFormField({ value: props.notes }),
+      date: Form.createFormField({ value: moment(props.date) }),
     };
   }
-})(NotesForm);
+})(EditForm);
