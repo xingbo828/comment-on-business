@@ -174,7 +174,7 @@ const ProjectOverview = ({ projectsOverview: { projects, status } }) => {
   const myProjects = projects.filter(p => p.type === 'DIRECT');
   return (
     <div>
-      <H1>My Projects</H1>
+      <H1>My Leads</H1>
       <Table
             loading={status === 'PENDING'}
             pagination={{ pageSize: 10 }}

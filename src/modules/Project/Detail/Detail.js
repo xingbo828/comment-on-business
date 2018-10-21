@@ -5,11 +5,7 @@ import get from 'lodash/get';
 import truncate from 'lodash/truncate';
 import toUpper from 'lodash/toUpper';
 
-// import ReplyForm from './ReplyForm';
-import ConfigurationDetail from './ConfigurationDetail';
-import ContactInfoCard from './ContactInfoCard';
-// import Hint from './Hint';
-// import Steps from './Steps';
+import ConfigurationDetailCards from './ConfigurationDetailCards';
 import EditForm from './EditForm';
 
 class ProjectDetail extends PureComponent {
@@ -42,7 +38,7 @@ class ProjectDetail extends PureComponent {
               <Tag color="#f50">Archived</Tag>
             )}
             <span><h1 style={{ fontSize: '1.325rem' }}>
-              Project:{' '}
+              Lead:{' '}
               {toUpper(
                 truncate(get(project, 'projectDetail.id'), {
                   length: 6,
@@ -53,16 +49,7 @@ class ProjectDetail extends PureComponent {
           </Col>
         </Row>
         <Divider style={{marginTop: 0}} />
-        {/* <Steps project={project} projectType={projectType} /> */}
-        {/* <Hint project={project} projectType={projectType} /> */}
-        <ContactInfoCard project={project} />
-        {/* <ReplyForm
-          project={project}
-          selectedProviderProfile={selectedProviderProfile}
-          match={match}
-          projectType={projectType}
-        /> */}
-        <ConfigurationDetail project={project} projectType={projectType} />
+        <ConfigurationDetailCards project={project} projectType={projectType} />
         <EditForm
           notes={get(project, 'projectDetail.receiver.notes')}
           date={get(project, 'projectDetail.receiver.date')}

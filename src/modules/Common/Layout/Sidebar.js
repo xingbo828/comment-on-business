@@ -12,7 +12,7 @@ const Sidebar = ({ history, location }) => {
   const config = [
     {
       key: '/projects',
-      text: 'Projects',
+      text: 'Leads',
       icon: 'project'
     },
     {
