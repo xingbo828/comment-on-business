@@ -4,7 +4,7 @@ import { message, Spin } from 'antd';
 import { withRouter , Redirect } from 'react-router-dom';
 import withLayout from '../../Common/withLayout';
 import OneColumnPreAuthLayout from '../../Common/Layout/OneColumnPreAuthLayout';
-import { compose, withStateHandlers, withProps, branch, renderComponent, lifecycle } from 'recompose';
+import { compose, withStateHandlers, withProps, branch, renderComponent } from 'recompose';
 import * as firebase from 'firebase';
 import Login from './Login';
 import { auth as firebaseAuth } from '../../../firebaseClient';
@@ -42,13 +42,16 @@ const enhance = compose(
     }
   ),
   withProps(props => ({
-    authButNotEmailVerified: props.account.get('status') === 'AUTHENTICATED' && !props.account.getIn(['user', 'emailVerified']),
+    // authButNotEmailVerified: props.account.get('status') === 'AUTHENTICATED' && !props.account.getIn(['user', 'emailVerified']),
     facebookLogin,
     googleLogin,
     register: async ({ email, password }) => {
       props.updateIsSubmitting(true);
       try {
         const user = await firebaseAuth.createUserWithEmailAndPassword(email, password);
+        if(!user.emailVerified) {
+          message.info(`A verification link has been sent to your email account at ${user.email}`, 10);
+        }
         await user.sendEmailVerification();
       } catch(error) {
         console.error(error)
@@ -59,7 +62,10 @@ const enhance = compose(
     login: async ({ email, password }) => {
       props.updateIsSubmitting(true);
       try {
-        await firebaseAuth.signInWithEmailAndPassword(email, password);
+        const user = await firebaseAuth.signInWithEmailAndPassword(email, password);
+        if(!user.emailVerified) {
+          message.info(`A verification link has been sent to your email account at ${user.email}`, 10);
+        }
       } catch(error) {
         console.error(error)
         message.error(error.message, 10);
@@ -72,21 +78,9 @@ const enhance = compose(
     renderComponent(Spinner)
   ),
   branch(
-    props => props.account.get('status') === 'AUTHENTICATED' && props.account.getIn(['user', 'emailVerified']),
+    props => props.account.get('status') === 'AUTHENTICATED',
     renderComponent(() => <Redirect to="/" />)
   ),
-  lifecycle({
-    componentWillReceiveProps(nextProps) {
-      if(nextProps.authButNotEmailVerified) {
-        message.info('Thank you for registering with us. We have sent a account verification email to you.', 0);
-      }
-    },
-    componentDidMount() {
-      if(this.props.authButNotEmailVerified) {
-        message.info('Thank you for registering with us. We have sent a account verification email to you.', 0);
-      }
-    }
-  }),
   withLayout(OneColumnPreAuthLayout)
 );
 
