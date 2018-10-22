@@ -42,7 +42,6 @@ const enhance = compose(
     }
   ),
   withProps(props => ({
-    // authButNotEmailVerified: props.account.get('status') === 'AUTHENTICATED' && !props.account.getIn(['user', 'emailVerified']),
     facebookLogin,
     googleLogin,
     register: async ({ email, password }) => {
