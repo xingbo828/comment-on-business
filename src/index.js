@@ -5,7 +5,7 @@ import App from './App';
 import './index.css';
 
 import configureStore from './store/configure-store';
-// import registerServiceWorker from './registerServiceWorker';
+import { unregister } from './registerServiceWorker';
 import { onAuthChange } from './modules/Account/onAuthChangeAction';
 
 
@@ -17,4 +17,4 @@ ReactDOM.render(
   document.getElementById('root')
 );
 store.dispatch(onAuthChange());
-// registerServiceWorker();
+unregister();
