@@ -12,7 +12,7 @@ class RegisterPanel extends Component {
   compareToFirstPassword = (rule, value, callback) => {
     const form = this.props.form;
     if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
+      callback('Password does not match the confirm password. ');
     } else {
       callback();
     }
@@ -131,7 +131,7 @@ class RegisterPanel extends Component {
         <OtherServicesWrapper>
           Register with other services
           <StyledIcon onClick={googleLogin} type="google" color="#d31b1c" />
-          <StyledIcon onClick={facebookLogin} type="facebook" color="#3b5899" />
+          {/* <StyledIcon onClick={facebookLogin} type="facebook" color="#3b5899" /> */}
         </OtherServicesWrapper>
       </Spin>
     );

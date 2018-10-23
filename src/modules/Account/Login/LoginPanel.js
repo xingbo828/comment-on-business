@@ -75,7 +75,7 @@ const LoginPanel = ({
       <OtherServicesWrapper>
         Login with other services
         <StyledIcon onClick={googleLogin} type="google" color="#d31b1c" />
-        <StyledIcon onClick={facebookLogin} type="facebook" color="#3b5899" />
+        {/* <StyledIcon onClick={facebookLogin} type="facebook" color="#3b5899" /> */}
       </OtherServicesWrapper>
     </Spin>
   );
