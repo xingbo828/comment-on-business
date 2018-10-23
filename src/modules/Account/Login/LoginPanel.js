@@ -10,7 +10,6 @@ const LoginPanel = ({
   isSubmitting,
   form,
   onSubmit,
-  facebookLogin,
   googleLogin
 }) => {
   const { getFieldDecorator } = form;

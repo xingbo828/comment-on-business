@@ -45,7 +45,6 @@ class RegisterPanel extends Component {
     const {
       isSubmitting,
       form: { getFieldDecorator },
-      facebookLogin,
       googleLogin
     } = this.props;
     return (
