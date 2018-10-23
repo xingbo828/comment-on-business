@@ -7,7 +7,7 @@ export const USER_LOGOUT = 'USER_LOGOUT';
 
 export const onAuthChange = () => dispatch => {
   auth.onAuthStateChanged(async (user) => {
-    if (user && user.emailVerified) {
+    if (user) {
       const userDocRef = userCollectionRef.doc(user.uid);
       const userDoc = await userDocRef.get();
       if(userDoc.exists){

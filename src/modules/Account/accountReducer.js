@@ -56,7 +56,7 @@ export const getUser = (state) => ({ user: state.getIn(['account', 'user'])});
 export const getAccount = state => ({ account: state.get('account') });
 
 export const isLoggedin = createSelector(
-  [ getAccount ], ({ account }) => ({ isLoggedIn: account.get('user').size > 0 && account.getIn(['user', 'emailVerified']), user: account.get('user'), loginStatus: account.get('status')})
+  [ getAccount ], ({ account }) => ({ isLoggedIn: account.get('user').size > 0 , user: account.get('user'), loginStatus: account.get('status')})
 );
 
 export const getSelectedProviderProfile = state => {
